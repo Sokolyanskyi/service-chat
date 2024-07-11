@@ -5,6 +5,7 @@ import {Link} from "expo-router";
 import axios from "axios";
 import {COUNTRIES, PROJECTS} from "@/states/routes";
 import {Country} from "@/states/cities.state";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Project {
     id: number;
@@ -21,12 +22,34 @@ interface Project {
 const ProjectList = () => {
     const [data, setData] = useState<Project[]>([])
     const [loading, setLoading] = useState(true)
+    const [token, setToken] = useState<any>()
+    useEffect(() => {
+        checkToken()
+    }, []);
+    const checkToken = async () => {
+        try {
+            const token = await AsyncStorage.getItem('access_token');
+            setToken(token)
+
+
+        } catch (error) {
+            console.error('Ошибка при проверке токена:', error);
+            alert(`${error}`)
+        }
+    };
+
     const getProjects = async () => {
         try {
-            const {data} = await axios.get(PROJECTS)
+            const {data} = await axios.get(PROJECTS,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+                )
             setData(data)
         } catch (err) {
-            console.log(err)
+            console.error(err)
         } finally {
             setLoading(false)
             console.log(data)
@@ -34,6 +57,7 @@ const ProjectList = () => {
     }
     useEffect(() => {
         getProjects()
+        console.log(token)
     }, []);
 
 

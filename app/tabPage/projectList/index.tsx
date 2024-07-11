@@ -3,8 +3,8 @@ import {Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View}
 import {FontSize, Gaps} from "@/components/shared/tokens";
 import {Link} from "expo-router";
 import axios from "axios";
-import {COUNTRIES, PROJECTS} from "@/states/routes";
-import {Country} from "@/states/cities.state";
+import { PROJECTS} from "@/states/routes";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Project {

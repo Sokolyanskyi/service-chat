@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Stack} from "expo-router";
-const NextLayout = () => {
+const SettingsLayout = () => {
     return (
         <Stack>
             <Stack.Screen name="index" options={{headerShown:false}}/>
@@ -9,4 +9,4 @@ const NextLayout = () => {
     );
 };
 
-export default NextLayout;
+export default SettingsLayout;

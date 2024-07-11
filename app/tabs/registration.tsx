@@ -43,7 +43,7 @@ const Registration = () => {
             countryId: selectedOption,
             name: name,
             phoneNumber: phoneNumber,
-            email: email,
+            email: email.toLowerCase(),
             password: password,
             password_confirmation: passwordConfirm
         }
@@ -60,12 +60,12 @@ const Registration = () => {
                 countryId: selectedOption,
                 name: name,
                 phoneNumber: phoneNumber,
-                email: email,
+                email: email.toLowerCase(),
                 password: password,
                 password_confirmation: passwordConfirm
             })
             router.replace('/tabs')
-
+            console.log(data)
         } catch (err: any) {
             alert(JSON.stringify(err.response.data))
             console.log(err.response.data)

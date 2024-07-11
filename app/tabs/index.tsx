@@ -30,11 +30,11 @@ const Login = () => {
     const login = async () => {
         try {
             const res = await axios.post(LOGIN, {
-                email: loginForm,
+                email: loginForm.toLowerCase(),
                 password: password
             })
             await AsyncStorage.setItem('access_token', res.data.Bearer.accessToken);
-            router.replace('/next');
+            router.replace('/tabPage');
             console.log(res.data.data)
         } catch (err: any) {
             alert(JSON.stringify(err.response.data))

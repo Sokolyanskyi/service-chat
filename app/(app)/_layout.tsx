@@ -31,7 +31,7 @@ export default function RootLayout() {
         <>
             {isAuthenticated ? (
 
-                <Redirect href="/next" />
+                <Redirect href="/tabPage" />
             ) : (
                 <Slot />
             )}

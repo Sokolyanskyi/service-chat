@@ -47,6 +47,7 @@ const ProjectList = () => {
                     }
                 }
                 )
+            console.log(data)
             setData(data)
         } catch (err) {
             console.error(err)

@@ -80,14 +80,17 @@ const AddProject = () => {
                         'Accept': 'application/json'
                     }
                 })
-
+            alert(dataInput.projectName)
             console.log(data)
         } catch (err: any) {
             alert(JSON.stringify(err.response.data))
             console.log(err.response.data)
+        } finally {
+
+            router.replace('/tabPage')
+            console.log(dataInput)
         }
-        alert(dataInput.projectName)
-        console.log(dataInput)
+
     }
 
 
@@ -104,8 +107,8 @@ const AddProject = () => {
                         <Input placeholder={'City'}  onChangeText={setCity}/>
                         <Input placeholder={'Address'}  onChangeText={setAddress}/>
                         <Input placeholder={'Commissioning Completion Date'} onChangeText={setDate}/>
-                        <Input placeholder={'Quantity of System'} onChangeText={setQSystem}/>
-                        <Input placeholder={'Quantity of Outdoor Unit'} onChangeText={setQOutdoor}/>
+                        <Input placeholder={'Quantity of System'} inputMode={'tel'} onChangeText={setQSystem}/>
+                        <Input placeholder={'Quantity of Outdoor Unit'} inputMode={'tel'} onChangeText={setQOutdoor}/>
                         <Button text={'Add Photos'}/>
                         <Button text={"Add Project"} onPress={() => addProject()}/>
                     </View>

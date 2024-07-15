@@ -1,10 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {FontSize, Gaps} from "@/components/shared/tokens";
-import {Link} from "expo-router";
-import axios from "axios";
-import { PROJECTS} from "@/states/routes";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+    ActivityIndicator,
+    Alert,
+    FlatList,
+    RefreshControl,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
+import {BorderRadius, FontSize, Gaps} from "@/components/shared/tokens";
+import {Link, useRouter} from "expo-router";
+import {useProjectsStore} from "@/states/projects.state";
+import {color} from "ansi-fragments";
 
 
 interface Project {
@@ -20,62 +29,37 @@ interface Project {
 
 
  const ProjectList = () => {
-    const [data, setData] = useState<Project[]>([])
-    const [loading, setLoading] = useState(true)
-    const [token, setToken] = useState<any>()
-
-    const checkToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem('access_token');
-            setToken(token)
-            console.log(token)
-
-        } catch (error) {
-            console.error('Ошибка при проверке токена:', error);
-            alert(`${error}`)
-        }
-    };
-
-    const getProjects = async () => {
-        try {
-            const {data} = await axios.get(PROJECTS,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                }
-                )
-            setData(data)
-        } catch (err) {
-            console.error(err)
-
-        } finally {
-            setLoading(false)
-            console.log(data)
-
-        }
-    }
-    useEffect(() => {
-        checkToken()
-        getProjects()
-        console.log(token)
-    }, []);
+     const [refreshing, setRefreshing] = useState(false);
+     const projects = useProjectsStore(state => state.projects);
+     const getProjects = useProjectsStore(state => state.getProjects);
+     const isLoading = useProjectsStore(state => state.isLoading);
 
 
-    const alert = (text: string) => {
-        Alert.alert('Error', `${text}`, [{
-            text: 'Close',
-            style: 'cancel'
-        }])
-    }
+     useEffect(() => {
+         setRefreshing(true);
+         getProjects()
+         setRefreshing(false);
+     }, [getProjects]);
+
+     const onRefresh = useCallback(() => {
+         getProjects();
+     }, [getProjects]);
+
+     if (isLoading) {
+         return (
+             <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+             <ActivityIndicator size="large" />
+             </SafeAreaView>)
+     }
+
 
 
     const renderItem = ({item}: { item: Project }) => (
         <Link href={`/tabPage/projectList/${item.id}/`} asChild>
-            <TouchableOpacity>
-                <Text>{item.name}</Text>
+            <TouchableOpacity style={styles.list}>
+                <View style={styles.listItem}>
+                <Text style={{color:'white'}}>{item.name}</Text>
+                </View>
             </TouchableOpacity>
         </Link>
     );
@@ -87,8 +71,16 @@ interface Project {
                 <View style={styles.content}>
                     <Text>Project List</Text>
                     <FlatList
-                        data={data}
+                        data={projects}
                         renderItem={renderItem}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                                colors={["#9Bd35A", "#689F38"]} // Цвета для Android
+                                tintColor="#689F38" // Цвет для iOS
+                            />
+                        }
                         // keyExtractor={(item:Project) => item.id}
                     />
                 </View>
@@ -111,6 +103,23 @@ const styles = StyleSheet.create({
         gap: Gaps.g50
     },
     form: {alignSelf: "stretch", gap: Gaps.g16},
+    listItem: {
+
+        backgroundColor:'blue',
+        height: 80,
+        borderRadius: BorderRadius.r10,
+        width:200,
+        alignItems: "center",
+        justifyContent: "center",
+        color:"white",
+        marginBottom: 20,
+    },
+    list: {
+        flex:1,
+        alignItems:'center',
+        justifyContent:'center',
+        gap:40
+    }
 
 })
 export default ProjectList;

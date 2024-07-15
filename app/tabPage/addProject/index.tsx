@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, FlatList, Alert} from "react-native";
+import {View, Text, StyleSheet, ScrollView, Alert} from "react-native";
 import {useRouter} from "expo-router";
 import {BorderRadius, Colors, FontSize, Gaps} from "@/components/shared/tokens";
 import Input from "@/components/shared/input/input";
 import Button from "@/components/shared/button/Button";
+import axios from "axios";
+import {PROJECTS} from "@/states/routes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const AddProject = () => {
@@ -14,9 +17,23 @@ const AddProject = () => {
     const [date, setDate] = useState('')
     const [qSystem, setQSystem] = useState('')
     const [qOutdoor, setQOutdoor] = useState('')
+    const [token, setToken] = useState<any>()
+    useEffect(() => {
+        checkToken()
+    }, []);
 
     const router = useRouter();
+    const checkToken = async () => {
+        try {
+            const token = await AsyncStorage.getItem('access_token');
+            setToken(token)
+            console.log(token)
 
+        } catch (error) {
+            console.error('Ошибка при проверке токена:', error);
+            alert(`${error}`)
+        }
+    };
 
     const alert = (text: string) => {
         if (text=== '') {
@@ -47,6 +64,28 @@ const AddProject = () => {
 
 
     const addProject = async () => {
+        try {
+            const {data} = await axios.post(PROJECTS, {
+                "name": projectName,
+                "city": city,
+                "address": address,
+                "commissioningCompletionDate": date,
+                "quantityOfSystem": qSystem,
+                "quantityOfOutdoorUnit": qOutdoor
+            },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                })
+
+            console.log(data)
+        } catch (err: any) {
+            alert(JSON.stringify(err.response.data))
+            console.log(err.response.data)
+        }
         alert(dataInput.projectName)
         console.log(dataInput)
     }

@@ -23,14 +23,12 @@ const ProjectList = () => {
     const [data, setData] = useState<Project[]>([])
     const [loading, setLoading] = useState(true)
     const [token, setToken] = useState<any>()
-    useEffect(() => {
-        checkToken()
-    }, []);
+
     const checkToken = async () => {
         try {
             const token = await AsyncStorage.getItem('access_token');
             setToken(token)
-
+            console.log(token)
 
         } catch (error) {
             console.error('Ошибка при проверке токена:', error);
@@ -43,20 +41,24 @@ const ProjectList = () => {
             const {data} = await axios.get(PROJECTS,
                 {
                     headers: {
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     }
                 }
                 )
-            console.log(data)
             setData(data)
         } catch (err) {
             console.error(err)
+
         } finally {
             setLoading(false)
             console.log(data)
+
         }
     }
     useEffect(() => {
+        checkToken()
         getProjects()
         console.log(token)
     }, []);

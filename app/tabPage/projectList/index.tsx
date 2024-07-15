@@ -4,7 +4,6 @@ import {FontSize, Gaps} from "@/components/shared/tokens";
 import {Link} from "expo-router";
 import axios from "axios";
 import { PROJECTS} from "@/states/routes";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Project {
@@ -19,7 +18,7 @@ interface Project {
 
 
 
-const ProjectList = () => {
+export const ProjectList = () => {
     const [data, setData] = useState<Project[]>([])
     const [loading, setLoading] = useState(true)
     const [token, setToken] = useState<any>()
@@ -113,4 +112,3 @@ const styles = StyleSheet.create({
     form: {alignSelf: "stretch", gap: Gaps.g16},
 
 })
-export default ProjectList;

@@ -12,35 +12,37 @@ interface Project {
     quantityOfSystem: number;
     quantityOfOutdoorUnit: number;
 }
-type Store ={
+
+type Store = {
     projects: Project[],
     isLoading: boolean,
     getProjects: () => Promise<void>
 
 }
-export const useProjectsStore = create<Store>()((set) =>({
-    projects:[],
+export const useProjectsStore = create<Store>()((set) => ({
+    projects: [],
     isLoading: false,
     getProjects: async () => {
         const token = await AsyncStorage.getItem('access_token');
-        set({ isLoading: true });
+        set({isLoading: true});
         if (token) {
-        try {
-            const {data} = await axios.get(PROJECTS,
-                {
-                    headers: {
-                        'Authorization': 'Bearer '+token,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+            try {
+                const {data} = await axios.get(PROJECTS,
+                    {
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
                     }
-                }
-            )
-            set({ projects:data, isLoading: false });
+                )
+                set({projects: data, isLoading: false});
 
-        } catch (err) {
-            set({ isLoading: false });
-            console.log(err)
+            } catch (err) {
+                set({isLoading: false});
+                console.log(err)
+            }
         }
-    }}
+    }
 
-}) )
+}))

@@ -36,7 +36,7 @@ const AddProject = () => {
     };
 
     const alert = (text: string) => {
-        if (text=== '') {
+        if (text === '') {
             Alert.alert('Warning', `please enter some information`, [{
                 text: 'I am going to',
                 style: 'cancel'
@@ -66,13 +66,13 @@ const AddProject = () => {
     const addProject = async () => {
         try {
             const {data} = await axios.post(PROJECTS, {
-                "name": projectName,
-                "city": city,
-                "address": address,
-                "commissioningCompletionDate": date,
-                "quantityOfSystem": qSystem,
-                "quantityOfOutdoorUnit": qOutdoor
-            },
+                    "name": projectName,
+                    "city": city,
+                    "address": address,
+                    "commissioningCompletionDate": date,
+                    "quantityOfSystem": qSystem,
+                    "quantityOfOutdoorUnit": qOutdoor
+                },
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -104,8 +104,8 @@ const AddProject = () => {
                     </Text>
                     <View style={styles.form}>
                         <Input placeholder={'Project Name'} onChangeText={setProjectName}/>
-                        <Input placeholder={'City'}  onChangeText={setCity}/>
-                        <Input placeholder={'Address'}  onChangeText={setAddress}/>
+                        <Input placeholder={'City'} onChangeText={setCity}/>
+                        <Input placeholder={'Address'} onChangeText={setAddress}/>
                         <Input placeholder={'Commissioning Completion Date'} onChangeText={setDate}/>
                         <Input placeholder={'Quantity of System'} inputMode={'tel'} onChangeText={setQSystem}/>
                         <Input placeholder={'Quantity of Outdoor Unit'} inputMode={'tel'} onChangeText={setQOutdoor}/>

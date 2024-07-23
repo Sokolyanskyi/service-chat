@@ -7,6 +7,9 @@ const ProjectLayout = () => {
             <Stack.Screen name="index" options={{headerShown:false}}/>
             <Stack.Screen name="edit" options={{headerShown:false}}/>
             <Stack.Screen name="view" options={{headerShown:false}}/>
+            <Stack.Screen name="chat" options={{headerShown:false}}/>
+
+
         </Stack>
     );
 };

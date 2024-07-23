@@ -36,6 +36,8 @@ const ProjectPage = () => {
                         style={{width: 300}}/>
                 <Button text={'View Project'} onPress={() => router.push(`/tabPage/projectList/${id}/view`)}
                         style={{width: 300}}/>
+                <Button text={'Chat'} onPress={() => router.push(`/tabPage/projectList/${id}/chat`)}
+                        style={{width: 300}}/>
             </View>
         </SafeAreaView>
     );

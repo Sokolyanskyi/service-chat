@@ -20,7 +20,7 @@ const Index = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>You have successfully logged in</Text>
-            <Celebration/>
+            {/*<Celebration/>*/}
             <Button text='Project list/ask' onPress={() => replaceFunc('/tabPage/projectList')} style={{width: 300}}></Button>
             <Button text='Add project' onPress={() => replaceFunc('/tabPage/addProject')} style={{width: 300}}></Button>
             <Button text='LogOut' onPress={handleLogout} style={{width: 300}}></Button>

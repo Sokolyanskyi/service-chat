@@ -1,13 +1,15 @@
 import {create} from 'zustand'
 import axios from "axios";
-import {PROJECT, PROJECTS} from "@/states/routes";
+import {PROJECT} from "@/states/routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 interface Project {
     id: number;
     name: string;
     city: string;
     address: string;
+    chat_ui:string;
     commissioningCompletionDate: string;
     quantityOfSystem: number;
     quantityOfOutdoorUnit: number;
@@ -24,6 +26,7 @@ export const useProjectStore = create<Store>()((set) =>({
         name: '',
         city: '',
         address:'',
+        chat_ui:'',
         commissioningCompletionDate:'',
         quantityOfSystem:0,
         quantityOfOutdoorUnit:0,
@@ -45,7 +48,8 @@ export const useProjectStore = create<Store>()((set) =>({
                     }
                 )
                 set({ project:data, isLoading: false });
-
+                await AsyncStorage.setItem('chat_uid', data.chatUid);
+                console.log(data)
             } catch (err) {
                 set({ isLoading: false });
                 console.error(err)

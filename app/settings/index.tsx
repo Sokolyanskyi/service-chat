@@ -1,7 +1,6 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {FontSize, Gaps} from "@/components/shared/tokens";
-import {Link} from "expo-router";
 
 const StartPage = () => {
     return (

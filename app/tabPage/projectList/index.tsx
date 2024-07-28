@@ -36,6 +36,7 @@ const ProjectList = () => {
     useEffect(() => {
         setRefreshing(true);
         getProjects()
+
         setRefreshing(false);
     }, [getProjects]);
 
@@ -83,7 +84,7 @@ if(projects.length === 0) {
                         <RefreshControl
                             refreshing={refreshing}
                             onRefresh={onRefresh}
-                            colors={["#9Bd35A", "#689F38"]} // Цвета для Android
+                            colors={["#9Bd35A", "#689F38"]}
                             tintColor="#689F38" // Цвет для iOS
                         />
                     }

@@ -16,6 +16,7 @@ const ProjectPage = () => {
     useEffect(() => {
         if (id)
             getProject(id)
+        console.log(project)
     }, []);
 
     if (isLoading) {

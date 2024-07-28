@@ -1,76 +1,75 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Text} from 'react-native';
-import {Bubble, GiftedChat, Send} from "react-native-gifted-chat";
-import {IconButton} from "react-native-paper";
+import {
+    ActivityIndicator,
+    SafeAreaView,
+    StyleSheet,
+    View
+} from 'react-native';
+import {useChatStore} from "@/states/chat.state";
+import React, {useCallback, useEffect} from "react";
+import {GiftedChat} from "react-native-gifted-chat";
+
+
 
 
 const Chat = () => {
-    const [messages, setMessages] = useState<any>([]);
+
+
+    const messages = useChatStore(state => state.messages);
+    const getMessages = useChatStore(state => state.getMessages);
+    const isLoading = useChatStore(state => state.isLoading);
+    const setMessages = useChatStore(state => state.setMessages);
 
     useEffect(() => {
-        setMessages([
-            {
-                _id: 1,
-                text: 'Hi!',
-                createdAt: new Date(),
-                user: {
-                    _id: 2,
-                    name: 'React Native',
-                    avatar: '',
-                },
-            },
-        ]);
-    }, []);
+        getMessages()
+        console.log(messages);
+    }, [])
 
-    const onSend = useCallback((messages = []) => {
-        setMessages(previousMessages =>
-            GiftedChat.append(previousMessages, messages),
-        );
-    }, []);
+    const onSend = useCallback((newMessages:any = []) => {
+        setMessages(newMessages);
+    }, [setMessages]);
 
-
-    const renderBubble = (props:any) => {
+    if (isLoading) {
         return (
-            <Bubble
-                {...props}
-                wrapperStyle={{
-                    right: {
-                        backgroundColor: '#2e64e5',
-                    },
-                }}
-                textStyle={{
-                    right: {
-                        color: '#fff',
-                    },
-                }}
-            />
+            <SafeAreaView style={styles.loadingContainer}>
+                <ActivityIndicator size="large" />
+            </SafeAreaView>
         );
-    };
-
-    const renderSend = (props:any) => {
-        return (
-            <Send {...props}>
-                <IconButton icon="send" size={32} color="#2e64e5" />
-            </Send>
-        );
-    };
+    }
 
     return (
-       <GiftedChat
-           messages={messages}
-           onSend={messages => onSend(messages)}
-           user={{
-               _id: 1,
-           }}
-           renderBubble={renderBubble}
-           renderSend={renderSend}
-           placeholder="Введите сообщение..."
-           alwaysShowSend
-       />
+        <View style={styles.container}>
+            <GiftedChat
+                messages={messages.map((message) => ({
+                    _id: message.id,
+                    text: message.text,
+                    createdAt: message.created_at,
+                    user: {
+                        _id: 1,
+                        name: message.user,
+                    },
+                }))}
+                onSend={onSend}
+                user={{
+                    _id: 1,
+                }}
+            />
+        </View>
+
+
     );
 
-}
-
+            }
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        marginTop: 40
+    },
+    loadingContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+});
 export default Chat
 
 

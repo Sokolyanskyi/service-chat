@@ -2,7 +2,6 @@ import {create} from 'zustand'
 import axios from "axios";
 import {CHAT_UID} from "@/states/routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Message} from "@/states/types";
 import {GiftedChat, IMessage} from "react-native-gifted-chat";
 
 interface ChatStore {

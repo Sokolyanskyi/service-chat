@@ -26,6 +26,7 @@ const Chat = () => {
     useEffect(() => {
         getMessages()
         getUser()
+        console.log(user)
     }, [setMessages])
 
     const onSend = useCallback((newMessages: IMessage[] = []) => {

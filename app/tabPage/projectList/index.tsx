@@ -36,7 +36,6 @@ const ProjectList = () => {
     useEffect(() => {
         setRefreshing(true);
         getProjects()
-
         setRefreshing(false);
     }, [getProjects]);
 

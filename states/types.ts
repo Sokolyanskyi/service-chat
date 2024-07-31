@@ -7,14 +7,14 @@ export interface User {
     avatar?: string;
 }
 
-export interface Message extends IMessage{
+export interface Message{
     created_at:string,
     updated_at:string,
     email:string,
     id:number,
     text:string,
-    is_ready:boolean,
-    user:User,
+    is_read:boolean,
+    user:string,
 }
 export type FetchMessages = {
     created_at:string,
@@ -22,10 +22,11 @@ export type FetchMessages = {
     email:string,
     id:number,
     text:string,
-    is_ready:boolean,
+    is_read:boolean,
     user:string,
 
 }
+
 
 export interface ChatState {
     chatId: string | null;

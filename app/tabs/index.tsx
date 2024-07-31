@@ -34,6 +34,7 @@ const Login = () => {
                 password: password
             })
             await AsyncStorage.setItem('access_token', res.data.Bearer.accessToken);
+            await AsyncStorage.setItem('user_data', JSON.stringify(res.data.data));
             router.replace('/tabPage');
             console.log(res.data.data)
         } catch (err: any) {

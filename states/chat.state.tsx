@@ -2,10 +2,11 @@ import {create} from 'zustand'
 import axios from "axios";
 import {CHAT_UID} from "@/states/routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {FetchMessages, Message} from "@/states/types";
+import { Message} from "@/states/types";
+import {GiftedChat, IMessage} from "react-native-gifted-chat";
 
 interface ChatStore {
-    messages: Message[];
+    messages: IMessage[];
     getMessages: () => Promise<void>;
     isLoading: boolean;
     setMessages: (messages: any) => Promise<void>;
@@ -32,8 +33,8 @@ export const useChatStore = create<ChatStore>()((set) =>({
                         }
                     }
                 )
-                console.log(data.messages)
-                set({ messages:data.messages, isLoading: false });
+
+                set({ messages:data.messages.reverse(), isLoading: false });
 
 
             } catch (err) {
@@ -43,15 +44,18 @@ export const useChatStore = create<ChatStore>()((set) =>({
                 set({ isLoading: false });
             }
         }},
-    setMessages: async (messages) => {
+    setMessages: async (messages:any) => {
         const token = await AsyncStorage.getItem('access_token');
         const uid = await AsyncStorage.getItem('chat_uid');
+        const text = {text:messages.text};
+
+
 
         set({ isLoading: true });
         if (token && uid) {
             try {
 
-                const {data} = await axios.post(CHAT_UID+`${uid}/talk`,messages,
+                const {data} = await axios.post(CHAT_UID+`${uid}/talk`,text,
                     {
                         headers: {
                             'Authorization': 'Bearer '+token,
@@ -60,10 +64,26 @@ export const useChatStore = create<ChatStore>()((set) =>({
                         }
                     }
                 )
-                console.log(data)
-                set({ messages:data.message, isLoading: false });
 
+                const resMessage:any = {
+                    id: messages._id,
+                    text: data.text,
+                    created_at: data.created_at,
+                    user: {
+                        _id: data.user,
+                        name: data.user,
+                        avatar: data.user,
+                    },
+                };
 
+                set(state =>{
+                    const newMessages = GiftedChat.append(state.messages, resMessage);
+                    // console.log('New messages state:', newMessages);
+                    return {
+                        messages: newMessages,
+                        isLoading: false
+                    };
+                })
             } catch (err) {
                 set({ isLoading: false });
                 console.error(err)

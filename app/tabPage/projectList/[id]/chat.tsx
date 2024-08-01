@@ -1,17 +1,17 @@
 import {
-    ActivityIndicator,
+    ActivityIndicator, Button,
     SafeAreaView,
     StyleSheet,
     View
 } from 'react-native';
 import {useChatStore} from "@/states/chat.state";
 import React, {useCallback, useEffect, useState} from "react";
-import {GiftedChat, IMessage} from "react-native-gifted-chat";
+import {Bubble, GiftedChat, IMessage} from "react-native-gifted-chat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const Chat = () => {
-
+    const [currentUserId, setCurrentUserId] = useState(1);
     const [user, setUser] = useState('')
     const fetchedMessages = useChatStore(state => state.messages);
     const getMessages = useChatStore(state => state.getMessages);
@@ -52,6 +52,10 @@ const Chat = () => {
             </SafeAreaView>
         );
     }
+    const switchUser = () => {
+        // Переключаем между ID 1 и 2
+        setCurrentUserId(prevId => (prevId === 1 ? 2 : 1));
+    };
 
     return (
         <View style={styles.container}>
@@ -71,8 +75,31 @@ const Chat = () => {
                     onSend(messages)
                 }
                 }
-                user={{_id: 1}}
+                user={{_id: currentUserId}}
+                renderBubble={props => (
+                    <Bubble
+                        {...props}
+                        wrapperStyle={{
+                            left: {
+                                backgroundColor: '#ddc3c3',
+                                marginLeft: -50,
+                            },
+                            right: {
+                                backgroundColor: '#5f9fd8',
+                                marginRight: 0,
+                                paddingRight:10
+                            },
+                        }}
+                    />
+                )}
+                // containerStyle={{
+                //     width: '100%', // Убедитесь, что контейнер занимает всю ширину
+                // }}
+                // messagesContainerStyle={{
+                //     paddingHorizontal: 10, // Добавляем горизонтальный отступ для всех сообщений
+                // }}
             />
+            <Button title={`Switch to User ${currentUserId === 1 ? 2 : 1}`} onPress={switchUser} />
         </View>
 
 

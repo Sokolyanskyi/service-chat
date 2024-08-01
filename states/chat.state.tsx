@@ -19,10 +19,10 @@ export const useChatStore = create<ChatStore>()((set) =>({
         const token = await AsyncStorage.getItem('access_token');
         const uid = await AsyncStorage.getItem('chat_uid');
 
-        set({ isLoading: true });
+
         if (token && uid) {
             try {
-
+                set({ isLoading: true });
                 const {data} = await axios.get(CHAT_UID+`${uid}/conversation`,
                     {
                         headers: {

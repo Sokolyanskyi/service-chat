@@ -5,7 +5,7 @@ import {
     View
 } from 'react-native';
 import {useChatStore} from "@/states/chat.state";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useLayoutEffect, useState} from "react";
 import {Bubble, GiftedChat, IMessage} from "react-native-gifted-chat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -16,18 +16,17 @@ const Chat = () => {
     const fetchedMessages = useChatStore(state => state.messages);
     const getMessages = useChatStore(state => state.getMessages);
     const isLoading = useChatStore(state => state.isLoading);
+    const [isReady, setIsReady] = useState(false);
     const setMessages = useChatStore(state => state.setMessages);
-    const getUser = async () => {
-        const data: any = await AsyncStorage.getItem('user_data')
-        const userData = JSON.parse(data);
-        setUser(userData.name)
 
-    }
     useEffect(() => {
         getMessages()
-        getUser()
-        console.log(user)
-    }, [setMessages])
+
+    }, [setMessages]);
+    useEffect(() => {
+        const timer = setTimeout(() => setIsReady(true), 100);
+        return () => clearTimeout(timer);
+    }, []);
 
     const onSend = useCallback((newMessages: IMessage[] = []) => {
 
@@ -43,23 +42,23 @@ const Chat = () => {
         };
         setMessages(resMessage)
 
-    }, [setMessages]);
+    }, []);
 
-    if (isLoading && fetchedMessages.length === 0) {
-        return (
-            <SafeAreaView style={styles.loadingContainer}>
-                <ActivityIndicator size="large"/>
-            </SafeAreaView>
-        );
-    }
+    // if (isLoading ) {
+    //     return (
+    //         <SafeAreaView style={styles.loadingContainer}>
+    //             <ActivityIndicator size="large"/>
+    //         </SafeAreaView>
+    //     );
+    // }
     const switchUser = () => {
-        // Переключаем между ID 1 и 2
+
         setCurrentUserId(prevId => (prevId === 1 ? 2 : 1));
     };
 
     return (
         <View style={styles.container}>
-            <GiftedChat
+            {isReady ? (<GiftedChat
                 alwaysShowSend={true}
                 messages={fetchedMessages.map((message: any) => ({
                     _id: message.id,
@@ -92,14 +91,12 @@ const Chat = () => {
                         }}
                     />
                 )}
-                // containerStyle={{
-                //     width: '100%', // Убедитесь, что контейнер занимает всю ширину
-                // }}
-                // messagesContainerStyle={{
-                //     paddingHorizontal: 10, // Добавляем горизонтальный отступ для всех сообщений
-                // }}
-            />
-            <Button title={`Switch to User ${currentUserId === 1 ? 2 : 1}`} onPress={switchUser} />
+
+            />) :  (<SafeAreaView style={styles.loadingContainer}>
+                            <ActivityIndicator size="large"/>
+                         </SafeAreaView>)}
+
+            {/*<Button title={`Switch to User ${currentUserId === 1 ? 2 : 1}`} onPress={switchUser} />*/}
         </View>
 
 
@@ -109,7 +106,8 @@ const Chat = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 40
+        marginTop: 40,
+        width: '100%', height: '100%'
     },
     loadingContainer: {
         flex: 1,

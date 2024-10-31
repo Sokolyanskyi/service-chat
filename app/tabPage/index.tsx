@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import Celebration from "@/hooks/animations/Celebration";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Index = () => {
   const router = useRouter();
@@ -17,25 +18,28 @@ const Index = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>You have successfully logged in</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.text}>You have successfully </Text>
+      <Text style={styles.text}>logged in</Text>
       {/*<Celebration/>*/}
-      <Button
-        text="Project list/ask"
-        onPress={() => replaceFunc("/tabPage/projectList")}
-        style={{ width: 300 }}
-      ></Button>
-      <Button
-        text="Add project"
-        onPress={() => replaceFunc("/tabPage/addProject")}
-        style={{ width: 300 }}
-      ></Button>
-      <Button
-        text="LogOut"
-        onPress={handleLogout}
-        style={{ width: 300 }}
-      ></Button>
-    </View>
+      <View style={{ gap: 30, marginTop: 30 }}>
+        <Button
+          text="Project list/ask"
+          onPress={() => replaceFunc("/tabPage/projectList")}
+          style={{ width: 300 }}
+        ></Button>
+        <Button
+          text="Add project"
+          onPress={() => replaceFunc("/tabPage/addProject")}
+          style={{ width: 300 }}
+        ></Button>
+        <Button
+          text="LogOut"
+          onPress={handleLogout}
+          style={{ width: 300 }}
+        ></Button>
+      </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
@@ -43,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    gap: 30,
+    gap: 5,
   },
   text: {
     fontSize: FontSize.fs30,

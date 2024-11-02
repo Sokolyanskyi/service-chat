@@ -5,6 +5,7 @@ export const Colors = {
   pureWhite: "#fff",
   pureBlack: "#000",
   accentColor: "#00b3ac",
+  borderColor: "#E7E7E7",
 };
 export const FontSize = {
   fs30: 30,

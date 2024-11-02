@@ -1,40 +1,63 @@
-import React, { useEffect, useState } from "react";
+import * as yup from "yup";
+
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
-  FlatList,
   Alert,
+  FlatList,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { useRouter } from "expo-router";
 import {
   BorderRadius,
   Colors,
   FontSize,
   Gaps,
 } from "@/components/shared/tokens";
-import Input from "@/components/shared/input/input";
+import { COUNTRIES, REGISTER } from "@/states/routes";
+import React, { useEffect, useState } from "react";
+
 import Button from "@/components/shared/button/Button";
 import { Country } from "@/states/cities.state";
-import axios from "axios";
-import { COUNTRIES, REGISTER } from "@/states/routes";
+import InputController from "@/components/shared/input/input";
 import { SafeAreaView } from "react-native-safe-area-context";
+import axios from "axios";
+import { useForm } from "react-hook-form";
+import { useRouter } from "expo-router";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const Registration = () => {
-  const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Country[]>([]);
   const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [optionName, setOptionName] = useState("");
+
+  const registerFormSchema = yup.object().shape({
+    name: yup.string().required("Name is required"),
+    phone: yup.string().required("Phone is required"),
+    email: yup
+      .string()
+      .email("Please enter a valid email")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters"),
+    password_confirmation: yup
+      .string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters"),
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(registerFormSchema) });
   const getCountry = async () => {
     try {
       const { data } = await axios.get(COUNTRIES);
@@ -53,30 +76,19 @@ const Registration = () => {
       },
     ]);
   };
-  useEffect(() => {
-    const dataInput = {
-      countryId: selectedOption,
-      name: name,
-      phoneNumber: phoneNumber,
-      email: email.toLowerCase(),
-      password: password,
-      password_confirmation: passwordConfirm,
-    };
-    console.log(dataInput);
-  }, [optionName, name, email, password, passwordConfirm, phoneNumber]);
 
   useEffect(() => {
     getCountry();
   }, []);
-  const register = async () => {
+  const register = async (dataForm: any) => {
     try {
       const { data } = await axios.post(REGISTER, {
         countryId: selectedOption,
-        name: name,
-        phoneNumber: phoneNumber,
-        email: email.toLowerCase(),
-        password: password,
-        password_confirmation: passwordConfirm,
+        name: dataForm.name,
+        phoneNumber: dataForm.phone,
+        email: dataForm.email.toLowerCase(),
+        password: dataForm.password,
+        password_confirmation: dataForm.password_confirmation,
       });
       router.replace("/tabs");
       console.log(data);
@@ -140,30 +152,53 @@ const Registration = () => {
                   </View>
                 </Modal>
               </View>
-              <Input placeholder={"Name"} onChangeText={setName} />
-              <Input
+              <InputController
+                errors={errors}
+                placeholder={"Name"}
+                control={control}
+                name="name"
+              />
+              <InputController
+                errors={errors}
+                name="phone"
                 placeholder={"Phone"}
-                inputMode={"tel"}
-                onChangeText={setPhoneNumber}
+                props={{ keyboardType: "phone-pad" }}
+                control={control}
               />
-              <Input
+              <InputController
+                errors={errors}
+                name="email"
                 placeholder={"Email"}
-                inputMode={"email"}
-                onChangeText={setEmail}
+                props={{ keyboardType: "email-address" }}
+                control={control}
               />
-              <Input
+              <InputController
+                errors={errors}
+                name="password"
                 placeholder={"Password"}
-                onChangeText={setPassword}
+                control={control}
                 //   isPassword={true}
               />
-              <Input
+              <InputController
+                errors={errors}
+                name="password_confirmation"
                 placeholder={"PasswordConfirm"}
-                onChangeText={setPasswordConfirm}
+                control={control}
                 //   isPassword={true}
               />
-              <Input placeholder={"From who bought Company"} />
-              <Input placeholder={"Installation Company Name"} />
-              <Button text={"Sing Up"} onPress={() => register()} />
+              <InputController
+                errors={errors}
+                placeholder={"From who bought Company"}
+                name="from"
+                control={control}
+              />
+              <InputController
+                errors={errors}
+                placeholder={"Installation Company Name"}
+                name="company"
+                control={control}
+              />
+              <Button text={"Sing Up"} onPress={handleSubmit(register)} />
             </View>
           </View>
         </View>

@@ -13,7 +13,7 @@ import { Colors } from "@/constants/Colors";
 
 const StartPage = () => {
   const handlePress = () => {
-    router.push("/tabs");
+    router.replace("/tabs");
   };
   return (
     <SafeAreaView

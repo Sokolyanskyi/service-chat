@@ -1,28 +1,39 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Alert,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import ErrorNotification from "@/components/shared/ErrorNotification/ErrorNotification";
-import Input from "@/components/shared/input/input";
+import * as yup from "yup";
+
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FieldValues, useForm } from "react-hook-form";
 import { FontSize, Gaps } from "@/components/shared/tokens";
-import Button from "@/components/shared/button/Button";
-import { useRouter } from "expo-router";
-import axios from "axios";
-import { LOGIN } from "@/states/routes";
+import React, { useState } from "react";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Button from "@/components/shared/button/Button";
 import { Colors } from "@/constants/Colors";
+import InputController from "@/components/shared/input/input";
+import { LOGIN } from "@/states/routes";
+import { SafeAreaView } from "react-native-safe-area-context";
+import axios from "axios";
+import { useRouter } from "expo-router";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const loginFormSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Please enter a valid email")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters"),
+});
 
 const Login = () => {
-  const [error, setError] = useState<string | undefined>();
-  const [loginForm, setLogin] = useState("");
-  const [password, setPassword] = useState("");
   const router = useRouter();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(loginFormSchema) });
 
   const handlePress = () => {
     router.push("/tabs/registration");
@@ -37,11 +48,11 @@ const Login = () => {
     ]);
   };
 
-  const login = async () => {
+  const login = async (data: FieldValues) => {
     try {
       const res = await axios.post(LOGIN, {
-        email: loginForm.toLowerCase(),
-        password: password,
+        email: data.email.toLowerCase(),
+        password: data.password,
       });
       await AsyncStorage.setItem("access_token", res.data.Bearer.accessToken);
       await AsyncStorage.setItem("user_data", JSON.stringify(res.data.data));
@@ -53,21 +64,26 @@ const Login = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <ErrorNotification error={error} />
       <View style={styles.content}>
         <Text style={styles.text}>Login Page</Text>
         <View style={styles.form}>
-          <Input
-            placeholder={"Login"}
-            inputMode={"email"}
-            onChangeText={setLogin}
+          <InputController
+            errors={errors}
+            name="email"
+            control={control}
+            placeholder={"Please enter email"}
+            props={{
+              keyboardType: "email-address",
+            }}
           />
-          <Input
-            placeholder={"Password"}
+          <InputController
+            errors={errors}
+            name="password"
+            control={control}
+            placeholder={"Please enter password"}
             isPassword={true}
-            onChangeText={setPassword}
           />
-          <Button text={"Login"} onPress={() => login()} />
+          <Button text={"Login"} onPress={handleSubmit(login)} />
         </View>
         <View style={styles.singup}>
           <Text>If you dont have account please </Text>

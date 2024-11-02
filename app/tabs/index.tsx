@@ -33,7 +33,7 @@ const Login = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(loginFormSchema) });
+  } = useForm({ resolver: yupResolver(loginFormSchema), mode: "onChange" });
 
   const handlePress = () => {
     router.push("/tabs/registration");
@@ -120,12 +120,12 @@ const styles = StyleSheet.create({
   content: {
     alignItems: "center",
     justifyContent: "center",
-    gap: Gaps.g50,
   },
-  form: { alignSelf: "stretch", gap: Gaps.g16 },
+  form: { alignSelf: "stretch" },
   singup: {
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 35,
   },
 });
 export default Login;

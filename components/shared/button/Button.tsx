@@ -1,14 +1,14 @@
-import React from "react";
-
 import {
+  Animated,
   Pressable,
   PressableProps,
+  StyleSheet,
   Text,
   View,
-  StyleSheet,
-  Animated,
 } from "react-native";
 import { BorderRadius, Colors, FontSize } from "@/components/shared/tokens";
+
+import React from "react";
 
 const Button = ({ text, ...props }: PressableProps & { text: string }) => {
   const animatedValue = new Animated.Value(100);
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.r10,
     height: 58,
     backgroundColor: Colors.accentColor,
+    marginTop: 20,
   },
   text: {
     color: Colors.pureWhite,

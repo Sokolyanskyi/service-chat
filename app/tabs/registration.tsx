@@ -38,7 +38,13 @@ const Registration = () => {
 
   const registerFormSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
-    phone: yup.string().required("Phone is required"),
+    phone: yup
+      .string()
+      .matches(
+        /^\+[0-9]{10,15}$/,
+        "Enter a valid number, starting with + and containing 10 to 15 digits."
+      )
+      .required("Phone is required"),
     email: yup
       .string()
       .email("Please enter a valid email")
@@ -49,6 +55,7 @@ const Registration = () => {
       .min(8, "Password must be at least 8 characters"),
     password_confirmation: yup
       .string()
+      .oneOf([yup.ref("password"), null], "Passwords must match")
       .required("Password is required")
       .min(8, "Password must be at least 8 characters"),
   });
@@ -57,7 +64,7 @@ const Registration = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(registerFormSchema) });
+  } = useForm({ resolver: yupResolver(registerFormSchema), mode: "onChange" });
   const getCountry = async () => {
     try {
       const { data } = await axios.get(COUNTRIES);
@@ -214,13 +221,13 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: FontSize.fs30,
+    marginBottom: 30,
   },
   content: {
     alignItems: "center",
     justifyContent: "center",
-    gap: Gaps.g50,
   },
-  form: { alignSelf: "stretch", gap: Gaps.g16 },
+  form: { alignSelf: "stretch" },
   input: {
     justifyContent: "center",
     height: 58,

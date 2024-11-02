@@ -32,9 +32,12 @@ const InputController: React.FC<ControllerInputProps> = ({
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   return (
     <>
-      {errors && errors[name] && (
-        <Text style={styles.textError}>{errors[name]?.message}</Text>
-      )}
+      <View style={{ height: 20 }}>
+        {errors && errors[name] && (
+          <Text style={styles.textError}>{errors[name]?.message}</Text>
+        )}
+      </View>
+
       <View>
         <Controller
           name={name}
@@ -54,7 +57,9 @@ const InputController: React.FC<ControllerInputProps> = ({
         />
         {isPassword && (
           <Pressable
-            style={styles.eyeIcon}
+            style={
+              errors && errors[name] ? styles.eyeIconError : styles.eyeIcon
+            }
             onPress={() => setIsPasswordVisible((state) => !state)}
           >
             {isPasswordVisible ? (
@@ -91,6 +96,15 @@ const styles = StyleSheet.create({
   eyeIcon: {
     position: "absolute",
     right: 0,
+    top: 0,
+    paddingHorizontal: 20,
+    paddingVertical: 18,
+  },
+
+  eyeIconError: {
+    position: "absolute",
+    right: 0,
+    top: 0,
     paddingHorizontal: 20,
     paddingVertical: 18,
   },

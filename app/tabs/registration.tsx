@@ -35,13 +35,15 @@ const Registration = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [optionName, setOptionName] = useState("");
+  console.log(optionName);
 
   const registerFormSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
+    lastname: yup.string().required("Lastname is required"),
     phone: yup
       .string()
       .matches(
-        /^\+[0-9]{10,15}$/,
+        /^[0-9]{10,15}$/,
         "Enter a valid number, starting with + and containing 10 to 15 digits."
       )
       .required("Phone is required"),
@@ -52,12 +54,30 @@ const Registration = () => {
     password: yup
       .string()
       .required("Password is required")
-      .min(8, "Password must be at least 8 characters"),
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /[a-z]/,
+        "Пароль должен содержать хотя бы одну букву в нижнем регистре"
+      )
+      .matches(
+        /[A-Z]/,
+        "Пароль должен содержать хотя бы одну букву в верхнем регистре"
+      )
+      .matches(/[0-9]/, "Пароль должен содержать хотя бы одну цифру"),
     password_confirmation: yup
       .string()
       .oneOf([yup.ref("password"), null], "Passwords must match")
       .required("Password is required")
-      .min(8, "Password must be at least 8 characters"),
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /[a-z]/,
+        "Пароль должен содержать хотя бы одну букву в нижнем регистре"
+      )
+      .matches(
+        /[A-Z]/,
+        "Пароль должен содержать хотя бы одну букву в верхнем регистре"
+      )
+      .matches(/[0-9]/, "Пароль должен содержать хотя бы одну цифру"),
   });
 
   const {
@@ -75,13 +95,20 @@ const Registration = () => {
       setLoading(false);
     }
   };
-  const alert = (text: string) => {
-    Alert.alert("Error", `${text}`, [
-      {
-        text: "Close",
-        style: "cancel",
-      },
-    ]);
+  const alert = (text: any) => {
+    const textError = JSON.parse(text);
+
+    Alert.alert(
+      "Error",
+      `      ${textError.errors.email}
+      ${textError.errors.phoneNumber}`,
+      [
+        {
+          text: "Close",
+          style: "cancel",
+        },
+      ]
+    );
   };
 
   useEffect(() => {
@@ -90,7 +117,8 @@ const Registration = () => {
   const register = async (dataForm: any) => {
     try {
       const { data } = await axios.post(REGISTER, {
-        countryId: selectedOption,
+        country: selectedOption,
+        lastname: dataForm.lastname,
         name: dataForm.name,
         phoneNumber: dataForm.phone,
         email: dataForm.email.toLowerCase(),
@@ -164,6 +192,12 @@ const Registration = () => {
                 placeholder={"Name"}
                 control={control}
                 name="name"
+              />
+              <InputController
+                errors={errors}
+                placeholder={"Last Name"}
+                control={control}
+                name="lastname"
               />
               <InputController
                 errors={errors}

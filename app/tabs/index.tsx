@@ -65,6 +65,9 @@ const Login = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
+        <View className="bg-red-500 flex-1">
+          <Text className="text-white">Taillwind</Text>
+        </View>
         <Text style={styles.text}>Login Page</Text>
         <View style={styles.form}>
           <InputController

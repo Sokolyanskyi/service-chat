@@ -1,10 +1,10 @@
+import { ActivityIndicator, StatusBar, Text, View } from "react-native";
 import React, { useEffect } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { FontSize, Gaps } from "@/components/shared/tokens";
+
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import { useProjectStore } from "@/states/project.state";
 import { useProjectsStore } from "@/states/projects.state";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const ProjectPage = () => {
   const project = useProjectStore((state) => state.project);
@@ -17,9 +17,7 @@ const ProjectPage = () => {
   }, []);
   if (isLoading) {
     return (
-      <SafeAreaView
-        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-      >
+      <SafeAreaView className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" />
       </SafeAreaView>
     );
@@ -27,63 +25,41 @@ const ProjectPage = () => {
 
   console.log(id);
   return (
-    <SafeAreaView
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-    >
-      <Text style={styles.title}>{project.name}</Text>
-      <View style={styles.content}>
-        <View style={styles.info}>
-          <Text style={styles.text}>id:</Text>
+    <SafeAreaView className="flex-1 justify-center items-center">
+      <StatusBar barStyle="dark-content" />
+      <Text className="text-4xl mb-4">{project.name}</Text>
+      <View className="gap-3 justify-center items-center">
+        <View className="justify-center items-center">
+          <Text className="text-2xl">id:</Text>
           <Text>{project.id}</Text>
         </View>
-        <View style={styles.info}>
-          <Text style={styles.text}>name:</Text>
+        <View className="justify-center items-center">
+          <Text className="text-2xl">name:</Text>
           <Text>{project.name}</Text>
         </View>
-        <View style={styles.info}>
-          <Text style={styles.text}>city:</Text>
+        <View className="justify-center items-center">
+          <Text className="text-2xl">city:</Text>
           <Text>{project.city}</Text>
         </View>
-        <View style={styles.info}>
-          <Text style={styles.text}>address:</Text>
+        <View className="justify-center items-center">
+          <Text className="text-2xl">address:</Text>
           <Text>{project.address}</Text>
         </View>
-        <View style={styles.info}>
-          <Text style={styles.text}>commissioning Completion Date:</Text>
+        <View className="justify-center items-center">
+          <Text className="text-2xl">commissioning Completion Date:</Text>
           <Text>{project.commissioningCompletionDate}</Text>
         </View>
-        <View style={styles.info}>
-          <Text style={styles.text}>quantityOfSystem:</Text>
+        <View className="justify-center items-center">
+          <Text className="text-2xl">quantityOfSystem:</Text>
           <Text>{project.quantityOfSystem}</Text>
         </View>
-        <View style={styles.info}>
-          <Text style={styles.text}>quantityOfOutdoorUnit:</Text>
+        <View className="justify-center items-center">
+          <Text className="text-2xl">quantityOfOutdoorUnit:</Text>
           <Text>{project.quantityOfOutdoorUnit}</Text>
         </View>
       </View>
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 45,
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: FontSize.fs30,
-    marginBottom: 30,
-  },
-  info: { alignItems: "center", justifyContent: "center" },
 
-  text: {
-    fontSize: FontSize.fs18,
-  },
-  content: {
-    alignItems: "center",
-    justifyContent: "center",
-    gap: Gaps.g16,
-  },
-  form: { alignSelf: "stretch", gap: Gaps.g16 },
-});
 export default ProjectPage;

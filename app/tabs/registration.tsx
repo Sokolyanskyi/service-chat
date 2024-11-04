@@ -10,12 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  BorderRadius,
-  Colors,
-  FontSize,
-  Gaps,
-} from "@/components/shared/tokens";
+import { BorderRadius, Colors, FontSize } from "@/components/shared/tokens";
 import { COUNTRIES, REGISTER } from "@/states/routes";
 import React, { useEffect, useState } from "react";
 
@@ -150,18 +145,15 @@ const Registration = () => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView className="flex-1">
       <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.content}>
-            <Text style={styles.text}>Registration Page</Text>
+        <View className="flex-1 justify-center mt-2">
+          <View className="justify-center items-center">
+            <Text className="text-4xl mb-6">Registration Page</Text>
 
-            <View style={styles.form}>
+            <View className="w-[300px]">
               <View style={styles.input}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setModalVisible(true)}
-                >
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Text
                     style={
                       selectedOption ? styles.textList : styles.textListGrey
@@ -179,7 +171,7 @@ const Registration = () => {
                 >
                   <View style={styles.modalView}>
                     <FlatList
-                      style={styles.list}
+                      className="w-full"
                       data={data}
                       renderItem={renderOption}
                       keyExtractor={(item) => item.id.toLocaleString()}
@@ -270,10 +262,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.softWhite,
     fontSize: FontSize.fs16,
   },
-  button: {
-    borderRadius: 5,
-    fontSize: 18,
-  },
+
   modalView: {
     margin: 20,
     backgroundColor: "white",
@@ -294,9 +283,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     fontSize: 30,
-  },
-  list: {
-    width: "100%",
   },
   textList: {
     fontSize: 18,

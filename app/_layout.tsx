@@ -1,9 +1,12 @@
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import React from "react";
-import { useEffect } from "react";
 import "react-native-reanimated";
+import "../global.css";
+
+import * as SplashScreen from "expo-splash-screen";
+
+import React from "react";
+import { Stack } from "expo-router";
+import { useEffect } from "react";
+import { useFonts } from "expo-font";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

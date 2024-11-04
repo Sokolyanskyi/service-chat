@@ -1,5 +1,5 @@
 import { BorderRadius, Colors, FontSize } from "@/components/shared/tokens";
-import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
+import { Controller, FieldErrors, FieldValues } from "react-hook-form";
 import {
   Pressable,
   StyleSheet,
@@ -30,11 +30,14 @@ const InputController: React.FC<ControllerInputProps> = ({
   ...props
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+
   return (
     <>
-      <View style={{ height: 20 }}>
+      <View className="h-8">
         {errors && errors[name] && (
-          <Text style={styles.textError}>{errors[name]?.message}</Text>
+          <Text className="text-[#ec4e4e] font-normal text-sm">
+            {errors[name]?.message}
+          </Text>
         )}
       </View>
 

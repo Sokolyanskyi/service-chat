@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { FontSize, Gaps } from "@/components/shared/tokens";
+import React, { useEffect } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
+
 import Button from "@/components/shared/button/Button";
-import { useProjectsStore } from "@/states/projects.state";
-import { useProjectStore } from "@/states/project.state";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useProjectStore } from "@/states/project.state";
+import { useProjectsStore } from "@/states/projects.state";
 
 const ProjectPage = () => {
   const project = useProjectStore((state) => state.project);
@@ -21,53 +21,34 @@ const ProjectPage = () => {
 
   if (isLoading) {
     return (
-      <SafeAreaView
-        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-      >
+      <SafeAreaView className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-    >
-      <View style={styles.content}>
-        <Text style={styles.text}>{project.name}</Text>
+    <SafeAreaView className="flex-1 justify-center items-center">
+      <View className="justify-center items-center gap-2">
+        <Text className="text-4xl">{project.name}</Text>
         <Button
           text={"Edit Project"}
           onPress={() => router.push(`/tabPage/projectList/${id}/edit`)}
-          style={{ width: 300 }}
+          className="w-[300px]"
         />
         <Button
           text={"View Project"}
           onPress={() => router.push(`/tabPage/projectList/${id}/view`)}
-          style={{ width: 300 }}
+          className="w-[300px]"
         />
         <Button
           text={"Chat"}
           onPress={() => router.push(`/tabPage/projectList/${id}/chat`)}
-          style={{ width: 300 }}
+          className="w-[300px]"
         />
       </View>
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 45,
-    justifyContent: "center",
-  },
-  text: {
-    fontSize: FontSize.fs30,
-  },
-  content: {
-    alignItems: "center",
-    justifyContent: "center",
-    gap: Gaps.g50,
-  },
-  form: { alignSelf: "stretch", gap: Gaps.g16 },
-});
+
 export default ProjectPage;

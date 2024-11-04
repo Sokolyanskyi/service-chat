@@ -1,11 +1,18 @@
-import { View, Text, StyleSheet, GestureResponderEvent } from "react-native";
-import { FontSize } from "@/components/shared/tokens";
-import Button from "@/components/shared/button/Button";
+import {
+  GestureResponderEvent,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
+import Button from "@/components/shared/button/Button";
 import Celebration from "@/hooks/animations/Celebration";
+import { FontSize } from "@/components/shared/tokens";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 const Index = () => {
   const router = useRouter();
@@ -13,46 +20,32 @@ const Index = () => {
     await AsyncStorage.removeItem("access_token");
     router.replace("/tabs");
   };
-  const replaceFunc = (link: string): any => {
-    router.push(link);
-  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>You have successfully </Text>
-      <Text style={styles.text}>logged in</Text>
+    <SafeAreaView className="flex-1 justify-center items-center">
+      <StatusBar barStyle="dark-content" />
+      <Text className="text-4xl">You have successfully </Text>
+      <Text className="text-3xl">logged in</Text>
       {/*<Celebration/>*/}
-      <View style={{ gap: 30, marginTop: 30 }}>
+      <View>
         <Button
           text="Project list/ask"
-          onPress={() => replaceFunc("/tabPage/projectList")}
-          style={{ width: 300 }}
+          onPress={() => router.push("/tabPage/projectList")}
+          className="w-[300px]"
         ></Button>
         <Button
           text="Add project"
-          onPress={() => replaceFunc("/tabPage/addProject")}
-          style={{ width: 300 }}
+          onPress={() => router.push("/tabPage/addProject")}
+          className="w-[300px]"
         ></Button>
         <Button
           text="LogOut"
           onPress={handleLogout}
-          style={{ width: 300 }}
+          className="w-[300px]"
         ></Button>
       </View>
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 5,
-  },
-  text: {
-    fontSize: FontSize.fs30,
-    alignItems: "center",
-    textAlign: "center",
-  },
-});
+
 export default Index;

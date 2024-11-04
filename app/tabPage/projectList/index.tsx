@@ -1,18 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
   RefreshControl,
+  ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { BorderRadius, FontSize, Gaps } from "@/components/shared/tokens";
-import { Link } from "expo-router";
-import { useProjectsStore } from "@/states/projects.state";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useCallback, useEffect, useState } from "react";
+
+import Button from "@/components/shared/button/Button";
 import { Colors } from "@/constants/Colors";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useProjectsStore } from "@/states/projects.state";
+import { useRouter } from "expo-router";
 
 interface Project {
   id: number;
@@ -29,6 +32,7 @@ const ProjectList = () => {
   const projects = useProjectsStore((state) => state.projects);
   const getProjects = useProjectsStore((state) => state.getProjects);
   const isLoading = useProjectsStore((state) => state.isLoading);
+  const router = useRouter();
 
   useEffect(() => {
     setRefreshing(true);
@@ -42,23 +46,14 @@ const ProjectList = () => {
 
   if (isLoading) {
     return (
-      <SafeAreaView
-        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-      >
+      <SafeAreaView className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" />
       </SafeAreaView>
     );
   }
   if (projects.length === 0) {
     return (
-      <SafeAreaView
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: 40,
-        }}
-      >
+      <SafeAreaView className="flex-1 justify-center items-center">
         <View>
           <Text>No projects found.</Text>
         </View>
@@ -67,63 +62,45 @@ const ProjectList = () => {
   }
 
   const renderItem = ({ item }: { item: Project }) => (
-    <Link href={`/tabPage/projectList/${item.id}/`} asChild>
-      <TouchableOpacity style={styles.list}>
-        <View style={styles.listItem}>
-          <Text style={{ color: "white", fontSize: FontSize.fs18 }}>
-            {item.name}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </Link>
+    <TouchableOpacity className="items-center justify-center gap-3">
+      <Button
+        text={item.name}
+        className="w-[300px]"
+        onPress={() => router.push(`/tabPage/projectList/${item.id}/`)}
+      >
+        <Text className="text-xl text-white ">{item.name}</Text>
+      </Button>
+    </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, marginTop: 40 }}>
-      <View style={styles.content}>
-        <Text style={styles.text}>Project List</Text>
-        <FlatList
-          data={projects}
-          renderItem={renderItem}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              colors={["#9Bd35A", "#689F38"]}
-              tintColor="#689F38" // Цвет для iOS
-            />
-          }
-          // keyExtractor={(item:Project) => item.id}
-        />
-      </View>
+    <SafeAreaView className="flex-1 justify-center items-center ">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        className="w-full "
+      >
+        <StatusBar barStyle="dark-content" />
+        <View className="items-center justify-center mb-16">
+          <Text className="text-4xl mb-2">Project List</Text>
+          <FlatList
+            scrollEnabled={false}
+            data={projects}
+            renderItem={renderItem}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={["#9Bd35A", "#689F38"]}
+                tintColor="#689F38" // Цвет для iOS
+              />
+            }
+            // keyExtractor={(item:Project) => item.id}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  text: {
-    fontSize: FontSize.fs30,
-  },
-  content: {
-    alignItems: "center",
-    justifyContent: "center",
-    gap: Gaps.g50,
-  },
-  form: { alignSelf: "stretch", gap: Gaps.g16 },
-  listItem: {
-    backgroundColor: Colors.accentColor,
-    height: 80,
-    borderRadius: BorderRadius.r10,
-    width: 300,
-    alignItems: "center",
-    justifyContent: "center",
-    color: "white",
-    marginBottom: 15,
-  },
-  list: {
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 40,
-    paddingHorizontal: 15,
-  },
-});
+
 export default ProjectList;

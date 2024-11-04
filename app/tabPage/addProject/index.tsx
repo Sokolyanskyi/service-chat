@@ -1,182 +1,169 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, Alert} from "react-native";
-import {useRouter} from "expo-router";
-import {BorderRadius, Colors, FontSize, Gaps} from "@/components/shared/tokens";
-import Input from "@/components/shared/input/input";
-import Button from "@/components/shared/button/Button";
-import axios from "axios";
-import {PROJECTS} from "@/states/routes";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as yup from "yup";
 
+import { Alert, ScrollView, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Button from "@/components/shared/button/Button";
+import DateInput from "@/components/DatePicker";
+import InputController from "@/components/shared/input/input";
+import { PROJECTS } from "@/states/routes";
+import { SafeAreaView } from "react-native-safe-area-context";
+import axios from "axios";
+import { useForm } from "react-hook-form";
+import { useRouter } from "expo-router";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const AddProject = () => {
+  const router = useRouter();
+  const [token, setToken] = useState<any>();
 
-    const [projectName, setProjectName] = useState('')
-    const [city, setCity] = useState('')
-    const [address, setAddress] = useState('')
-    const [date, setDate] = useState('')
-    const [qSystem, setQSystem] = useState('')
-    const [qOutdoor, setQOutdoor] = useState('')
-    const [token, setToken] = useState<any>()
-    useEffect(() => {
-        checkToken()
-    }, []);
+  const addProjectFormSchema = yup.object().shape({
+    projectName: yup.string().required("Project name is required"),
+    city: yup.string().required("City is required"),
+    address: yup.string().required("Address is required"),
+    date: yup.date().required("Commissioning Completion Date is required"),
+    qSystem: yup
+      .string()
+      .matches(/[0-9]/, "Quantity of System must be a integer")
+      .required("Quantity of System is required"),
+    qOutdoor: yup
+      .string()
+      .matches(/[0-9]/, "Quantity of Outdoor Unit must be a integer")
+      .required("Quantity of Outdoor Unit is required"),
+  });
 
-    const router = useRouter();
-    const checkToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem('access_token');
-            setToken(token)
-            console.log(token)
-
-        } catch (error) {
-            console.error('Ошибка при проверке токена:', error);
-            alert(`${error}`)
-        }
-    };
-
-    const alert = (text: string) => {
-        if (text === '') {
-            Alert.alert('Warning', `please enter some information`, [{
-                text: 'I am going to',
-                style: 'cancel'
-            }])
-        } else {
-            Alert.alert('Added project', `${text}`, [{
-                text: 'Good!',
-                style: 'cancel'
-            }])
-        }
-
+  const checkToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem("access_token");
+      setToken(token);
+    } catch (error) {
+      console.error("Ошибка при проверке токена:", error);
+      alert(`${error}`);
     }
-    const dataInput = {
-        projectName: projectName,
-        city: city,
-        address: address,
-        date: date,
-        qSystem: qSystem,
-        qOutdoor: qOutdoor
-    }
-    useEffect(() => {
+  };
+  useEffect(() => {
+    checkToken();
+  }, []);
 
-        console.log(dataInput)
-    }, [qOutdoor, projectName, city, address, date, qSystem]);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(addProjectFormSchema),
+    mode: "onChange",
+  });
 
+  //   const alert = (text: string) => {
+  //     if (text === "") {
+  //       Alert.alert("Warning", `please enter some information`, [
+  //         {
+  //           text: "I am going to",
+  //           style: "cancel",
+  //         },
+  //       ]);
+  //     } else {
+  //       Alert.alert("Added project", `${text}`, [
+  //         {
+  //           text: "Good!",
+  //           style: "cancel",
+  //         },
+  //       ]);
+  //     }
+  //   };
+  interface dataForm {
+    projectName: string;
+    city: string;
+    address: string;
+    date: string;
+    qSystem: string;
+    qOutdoor: string;
+  }
 
-    const addProject = async () => {
-        try {
-            const {data} = await axios.post(PROJECTS, {
-                    "name": projectName,
-                    "city": city,
-                    "address": address,
-                    "commissioningCompletionDate": date,
-                    "quantityOfSystem": qSystem,
-                    "quantityOfOutdoorUnit": qOutdoor
-                },
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                })
-            alert(dataInput.projectName)
-            console.log(data)
-        } catch (err: any) {
-            alert(JSON.stringify(err.response.data))
-            console.log(err.response.data)
-        } finally {
-
-            router.replace('/tabPage')
-            console.log(dataInput)
-        }
-
-    }
-
-
-    return (
-        <ScrollView>
-            <View style={styles.container}>
-
-                <View style={styles.content}>
-                    <Text style={styles.text}>
-                        Add Project
-                    </Text>
-                    <View style={styles.form}>
-                        <Input placeholder={'Project Name'} onChangeText={setProjectName}/>
-                        <Input placeholder={'City'} onChangeText={setCity}/>
-                        <Input placeholder={'Address'} onChangeText={setAddress}/>
-                        <Input placeholder={'Commissioning Completion Date'} onChangeText={setDate}/>
-                        <Input placeholder={'Quantity of System'} inputMode={'tel'} onChangeText={setQSystem}/>
-                        <Input placeholder={'Quantity of Outdoor Unit'} inputMode={'tel'} onChangeText={setQOutdoor}/>
-                        <Button text={'Add Photos'}/>
-                        <Button text={"Add Project"} onPress={() => addProject()}/>
-                    </View>
-                </View>
-            </View>
-        </ScrollView>
-    );
-};
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 45,
-        justifyContent: 'center'
-    },
-    text: {
-        fontSize: FontSize.fs30,
-    },
-    content: {
-        alignItems: "center",
-        justifyContent: "center",
-        gap: Gaps.g50
-    },
-    form: {alignSelf: "stretch", gap: Gaps.g16},
-    input: {
-        justifyContent: 'center',
-        height: 58,
-        paddingHorizontal: 24,
-        borderRadius: BorderRadius.r10,
-        backgroundColor: Colors.softWhite,
-        fontSize: FontSize.fs16
-
-    },
-    button: {
-        borderRadius: 5,
-        fontSize: 18
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2
+  const addProjectForm = async (dataForm: any) => {
+    try {
+      const { data } = await axios.post(
+        PROJECTS,
+        {
+          name: dataForm.projectName,
+          city: dataForm.city,
+          address: dataForm.address,
+          commissioningCompletionDate: dataForm.date,
+          quantityOfSystem: dataForm.qSystem,
+          quantityOfOutdoorUnit: dataForm.qOutdoor,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-    },
-    option: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    list: {
-        width: "100%",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+      console.log(dataForm);
 
-    },
-    textList: {
-        fontSize: 16,
-        color: 'black'
-    },
-    textListGrey: {
-        fontSize: 16,
-        color: Colors.placeholder
+      console.log(data);
+      router.replace("/tabPage");
+    } catch (err: any) {
+      console.log(err.response.data);
     }
+  };
 
-})
-export default AddProject
+  return (
+    <SafeAreaView>
+      <ScrollView>
+        <View className="flex-1 justify-center items-center">
+          <View className="gap-3 justify-center items-center">
+            <Text className="text-4xl mt-4">Add Project</Text>
+            <View className="w-[300px]">
+              <InputController
+                errors={errors}
+                placeholder={"Project Name"}
+                control={control}
+                name="projectName"
+              />
+              <InputController
+                errors={errors}
+                placeholder={"City"}
+                control={control}
+                name="city"
+              />
+              <InputController
+                errors={errors}
+                placeholder={"Address"}
+                control={control}
+                name="address"
+              />
+              <DateInput control={control} name="date" errors={errors} />
+
+              <InputController
+                errors={errors}
+                placeholder={"Quantity of System"}
+                control={control}
+                name="qSystem"
+              />
+              <InputController
+                errors={errors}
+                placeholder={"Quantity of Outdoor Unit"}
+                control={control}
+                name="qOutdoor"
+              />
+
+              <Button
+                text={"Add Photos"}
+                onPress={() => console.log("Add Photos")}
+              />
+              <Button
+                text={"Add Project"}
+                onPress={handleSubmit(addProjectForm)}
+              />
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default AddProject;

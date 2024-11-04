@@ -33,7 +33,7 @@ const InputController: React.FC<ControllerInputProps> = ({
 
   return (
     <>
-      <View className="h-8">
+      <View>
         {errors && errors[name] && (
           <Text className="text-[#ec4e4e] font-normal text-sm">
             {errors[name]?.message}
@@ -41,7 +41,7 @@ const InputController: React.FC<ControllerInputProps> = ({
         )}
       </View>
 
-      <View>
+      <View className="mb-6">
         <Controller
           name={name}
           control={control}
@@ -85,13 +85,15 @@ const styles = StyleSheet.create({
     height: 58,
     paddingHorizontal: 24,
     borderRadius: BorderRadius.r10,
-    backgroundColor: Colors.softWhite,
+    backgroundColor: "#e1eeea",
     fontSize: FontSize.fs16,
   },
   inputError: {
     height: 58,
     paddingHorizontal: 24,
     borderRadius: BorderRadius.r10,
+    backgroundColor: "#e1eeea",
+
     borderColor: "#ec4e4e",
     borderWidth: 1,
     fontSize: FontSize.fs16,

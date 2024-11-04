@@ -65,10 +65,8 @@ const Login = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <View className="bg-red-500 flex-1">
-          <Text className="text-white">Taillwind</Text>
-        </View>
-        <Text style={styles.text}>Login Page</Text>
+        <View className="bg-red-500 flex-1"></View>
+        <Text className="text-4xl text-center mb-4">Login Page</Text>
         <View style={styles.form}>
           <InputController
             errors={errors}
@@ -90,21 +88,11 @@ const Login = () => {
         </View>
         <View style={styles.singup}>
           <Text>If you dont have account please </Text>
-          <TouchableOpacity onPress={handlePress}>
-            <Text
-              style={{
-                color: Colors.accentColor,
-                fontSize: 14,
-                fontWeight: "bold",
-                marginTop: 10,
-                borderColor: Colors.accentColor,
-                borderWidth: 1,
-                borderRadius: 5,
-                padding: 3,
-              }}
-            >
-              Sing Up
-            </Text>
+          <TouchableOpacity
+            onPress={handlePress}
+            className="mt-5 border-2 border-[#00b3ac] px-2 #00b3ac rounded-md justify-center items-center"
+          >
+            <Text className="text-[#00b3ac] text-lg font-bold">Sing Up</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -112,10 +112,13 @@ const AddProject = () => {
 
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <View className="flex-1 justify-center items-center">
           <View className="gap-3 justify-center items-center">
-            <Text className="text-4xl mt-4">Add Project</Text>
+            <Text className="text-4xl  my-4">Add Project</Text>
             <View className="w-[300px]">
               <InputController
                 errors={errors}

@@ -28,8 +28,8 @@ const DateInput = ({ control, name, errors }) => {
   };
 
   return (
-    <View>
-      <View className="h-8">
+    <View className="mb-6">
+      <View>
         {errors && errors[name] && (
           <Text className="text-[#ec4e4e] font-normal text-sm">
             {errors[name]?.message}
@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
     height: 58,
     paddingHorizontal: 24,
     borderRadius: BorderRadius.r10,
-    backgroundColor: Colors.softWhite,
+    backgroundColor: "#e1eeea",
+
     fontSize: FontSize.fs16,
     justifyContent: "center",
   },
@@ -83,6 +84,7 @@ const styles = StyleSheet.create({
     borderColor: "#ec4e4e",
     borderWidth: 1,
     fontSize: FontSize.fs16,
+    backgroundColor: "#e1eeea",
   },
   eyeIcon: {
     position: "absolute",

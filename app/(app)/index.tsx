@@ -1,4 +1,3 @@
-import { FontSize, Gaps } from "@/components/shared/tokens";
 import {
   SafeAreaView,
   StatusBar,
@@ -24,10 +23,11 @@ const StartPage = () => {
         <Text className="text-xl">If you have account please </Text>
       </View>
       <View>
-        <TouchableOpacity onPress={handlePress}>
-          <Text className="text-lg font-bold mt-2 border-2 text-[#00b3ac] border-[#00b3ac] rounded-md px-2 py-1">
-            Login
-          </Text>
+        <TouchableOpacity
+          onPress={handlePress}
+          className="justify-center items-center border-[#00b3ac] rounded-md border-2"
+        >
+          <Text className="text-lg font-bold text-[#00b3ac] px-2">Login</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

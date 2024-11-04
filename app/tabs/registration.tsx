@@ -5,6 +5,7 @@ import {
   FlatList,
   Modal,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -146,12 +147,16 @@ const Registration = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <ScrollView>
+      <StatusBar barStyle="dark-content" />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <View className="flex-1 justify-center mt-2">
-          <View className="justify-center items-center">
-            <Text className="text-4xl mb-6">Registration Page</Text>
+          <View className="justify-center items-center  ">
+            <Text className="text-4xl mb-10 mt-5">Registration Page</Text>
 
-            <View className="w-[300px]">
+            <View className="w-[300px] mb-20">
               <View style={styles.input}>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Text
@@ -259,7 +264,8 @@ const styles = StyleSheet.create({
     height: 58,
     paddingHorizontal: 24,
     borderRadius: BorderRadius.r10,
-    backgroundColor: Colors.softWhite,
+    backgroundColor: "#e1eeea",
+    bottom: 20,
     fontSize: FontSize.fs16,
   },
 

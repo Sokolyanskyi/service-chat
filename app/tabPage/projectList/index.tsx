@@ -81,7 +81,7 @@ const ProjectList = () => {
         className="w-full "
       >
         <StatusBar barStyle="dark-content" />
-        <View className="items-center justify-center mb-16">
+        <View className="items-center justify-center mb-16 mt-5">
           <Text className="text-4xl mb-2">Project List</Text>
           <FlatList
             scrollEnabled={false}

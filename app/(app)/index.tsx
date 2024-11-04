@@ -1,10 +1,10 @@
 import {
+  Image,
   SafeAreaView,
   StatusBar,
   Text,
   TouchableOpacity,
   View,
-    Image
 } from "react-native";
 
 import React from "react";
@@ -17,12 +17,14 @@ const StartPage = () => {
   return (
     <SafeAreaView className="flex-1 justify-center items-center">
       <StatusBar barStyle="dark-content" />
-        <View className='w-[400px] mb-10 justify-center items-center'>
-
-            <Image source={require('../../assets/images/logo.png')} className="w-[300px] h-[48px]  "/>
-        </View>
+      <View className="mb-10">
+        <Image
+          source={require("../../assets/images/logo.png")}
+          className="w-[300px] h-[47px]"
+        />
+      </View>
       <View className="mb-5">
-        <Text className="text-5xl font-bold">Welcome</Text>
+        <Text className="text-5xl font-bold text-gray-700">Welcome</Text>
       </View>
       <View className="mb-5">
         <Text className="text-xl">If you have account please </Text>

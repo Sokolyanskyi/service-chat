@@ -18,6 +18,7 @@ const StartPage = () => {
     <SafeAreaView className="flex-1 justify-center items-center">
       <StatusBar barStyle="dark-content" />
         <View className='w-[400px] mb-10 justify-center items-center'>
+
             <Image source={require('../../assets/images/logo.png')} className="w-[300px] h-[48px]  "/>
         </View>
       <View className="mb-5">

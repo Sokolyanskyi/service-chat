@@ -1,4 +1,4 @@
-import * as yup from "yup";
+import * as yup from 'yup';
 
 import {
   Alert,
@@ -10,77 +10,77 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { BorderRadius, Colors, FontSize } from "@/components/shared/tokens";
-import { COUNTRIES, REGISTER } from "@/states/routes";
-import React, { useEffect, useState } from "react";
+} from 'react-native';
+import { BorderRadius, Colors, FontSize } from '@/components/shared/tokens';
+import { COUNTRIES, REGISTER } from '@/states/routes';
+import React, { useEffect, useState } from 'react';
 
-import Button from "@/components/shared/button/Button";
-import { Country } from "@/states/cities.state";
-import InputController from "@/components/shared/input/input";
-import { SafeAreaView } from "react-native-safe-area-context";
-import axios from "axios";
-import { useForm } from "react-hook-form";
-import { useRouter } from "expo-router";
-import { yupResolver } from "@hookform/resolvers/yup";
+import Button from '@/components/shared/button/Button';
+import { Country } from '@/states/cities.state';
+import InputController from '@/components/shared/input/input';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'expo-router';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-const Registration = () => {
+const Index = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Country[]>([]);
   const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
-  const [optionName, setOptionName] = useState("");
+  const [selectedOption, setSelectedOption] = useState('');
+  const [optionName, setOptionName] = useState('');
   console.log(optionName);
 
   const registerFormSchema = yup.object().shape({
-    name: yup.string().required("Name is required"),
-    lastname: yup.string().required("Lastname is required"),
+    name: yup.string().required('Name is required'),
+    lastname: yup.string().required('Lastname is required'),
     phone: yup
       .string()
       .matches(
         /^[0-9]{10,15}$/,
-        "Enter a valid number, starting with + and containing 10 to 15 digits."
+        'Enter a valid number, starting with + and containing 10 to 15 digits.',
       )
-      .required("Phone is required"),
+      .required('Phone is required'),
     email: yup
       .string()
-      .email("Please enter a valid email")
-      .required("Email is required"),
+      .email('Please enter a valid email')
+      .required('Email is required'),
     password: yup
       .string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters")
+      .required('Password is required')
+      .min(8, 'Password must be at least 8 characters')
       .matches(
         /[a-z]/,
-        "Пароль должен содержать хотя бы одну букву в нижнем регистре"
+        'Пароль должен содержать хотя бы одну букву в нижнем регистре',
       )
       .matches(
         /[A-Z]/,
-        "Пароль должен содержать хотя бы одну букву в верхнем регистре"
+        'Пароль должен содержать хотя бы одну букву в верхнем регистре',
       )
-      .matches(/[0-9]/, "Пароль должен содержать хотя бы одну цифру"),
+      .matches(/[0-9]/, 'Пароль должен содержать хотя бы одну цифру'),
     password_confirmation: yup
       .string()
-      .oneOf([yup.ref("password"), null], "Passwords must match")
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters")
+      .oneOf([yup.ref('password'), undefined], 'Passwords must match')
+      .required('Password is required')
+      .min(8, 'Password must be at least 8 characters')
       .matches(
         /[a-z]/,
-        "Пароль должен содержать хотя бы одну букву в нижнем регистре"
+        'Пароль должен содержать хотя бы одну букву в нижнем регистре',
       )
       .matches(
         /[A-Z]/,
-        "Пароль должен содержать хотя бы одну букву в верхнем регистре"
+        'Пароль должен содержать хотя бы одну букву в верхнем регистре',
       )
-      .matches(/[0-9]/, "Пароль должен содержать хотя бы одну цифру"),
+      .matches(/[0-9]/, 'Пароль должен содержать хотя бы одну цифру'),
   });
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(registerFormSchema), mode: "onChange" });
+  } = useForm({ resolver: yupResolver(registerFormSchema), mode: 'onChange' });
   const getCountry = async () => {
     try {
       const { data } = await axios.get(COUNTRIES);
@@ -91,21 +91,22 @@ const Registration = () => {
       setLoading(false);
     }
   };
-  const alert = (text: any) => {
+  const alert = (text: string) => {
     const textError = JSON.parse(text);
 
     Alert.alert(
-      "Error",
+      'Error',
       `      ${textError.errors.email}
       ${textError.errors.phoneNumber}`,
       [
         {
-          text: "Close",
-          style: "cancel",
+          text: 'Close',
+          style: 'cancel',
         },
-      ]
+      ],
     );
   };
+  /* eslint-disable */
 
   useEffect(() => {
     getCountry();
@@ -121,7 +122,7 @@ const Registration = () => {
         password: dataForm.password,
         password_confirmation: dataForm.password_confirmation,
       });
-      router.replace("/tabs");
+      router.replace('/auth/login');
       console.log(data);
     } catch (err: any) {
       alert(JSON.stringify(err.response.data));
@@ -139,7 +140,7 @@ const Registration = () => {
         setModalVisible(false);
       }}
     >
-      <Text style={{ color: "black", fontSize: FontSize.fs18 }}>
+      <Text style={{ color: 'black', fontSize: FontSize.fs18 }}>
         {item.name}
       </Text>
     </TouchableOpacity>
@@ -164,7 +165,7 @@ const Registration = () => {
                       selectedOption ? styles.textList : styles.textListGrey
                     }
                   >
-                    {selectedOption ? optionName : "Please choose country"}
+                    {selectedOption ? optionName : 'Please choose country'}
                   </Text>
                 </TouchableOpacity>
 
@@ -186,57 +187,57 @@ const Registration = () => {
               </View>
               <InputController
                 errors={errors}
-                placeholder={"Name"}
+                placeholder={'Name'}
                 control={control}
                 name="name"
               />
               <InputController
                 errors={errors}
-                placeholder={"Last Name"}
+                placeholder={'Last Name'}
                 control={control}
                 name="lastname"
               />
               <InputController
                 errors={errors}
                 name="phone"
-                placeholder={"Phone"}
-                props={{ keyboardType: "phone-pad" }}
+                placeholder={'Phone'}
+                props={{ keyboardType: 'phone-pad' }}
                 control={control}
               />
               <InputController
                 errors={errors}
                 name="email"
-                placeholder={"Email"}
-                props={{ keyboardType: "email-address" }}
+                placeholder={'Email'}
+                props={{ keyboardType: 'email-address' }}
                 control={control}
               />
               <InputController
                 errors={errors}
                 name="password"
-                placeholder={"Password"}
+                placeholder={'Password'}
                 control={control}
                 //   isPassword={true}
               />
               <InputController
                 errors={errors}
                 name="password_confirmation"
-                placeholder={"PasswordConfirm"}
+                placeholder={'PasswordConfirm'}
                 control={control}
                 //   isPassword={true}
               />
               <InputController
                 errors={errors}
-                placeholder={"From who bought Company"}
+                placeholder={'From who bought Company'}
                 name="from"
                 control={control}
               />
               <InputController
                 errors={errors}
-                placeholder={"Installation Company Name"}
+                placeholder={'Installation Company Name'}
                 name="company"
                 control={control}
               />
-              <Button text={"Sing Up"} onPress={handleSubmit(register)} />
+              <Button text={'Sing Up'} onPress={handleSubmit(register)} />
             </View>
           </View>
         </View>
@@ -248,34 +249,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 45,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   text: {
     fontSize: FontSize.fs30,
     marginBottom: 30,
   },
   content: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  form: { alignSelf: "stretch" },
+  form: { alignSelf: 'stretch' },
   input: {
-    justifyContent: "center",
+    justifyContent: 'center',
     height: 58,
     paddingHorizontal: 24,
     borderRadius: BorderRadius.r10,
-    backgroundColor: "#e1eeea",
+    backgroundColor: '#e1eeea',
     bottom: 20,
     fontSize: FontSize.fs16,
   },
 
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#00b3ac",
+    alignItems: 'center',
+    shadowColor: '#00b3ac',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -287,16 +288,16 @@ const styles = StyleSheet.create({
   option: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: '#ccc',
     fontSize: 30,
   },
   textList: {
     fontSize: 18,
-    color: "black",
+    color: 'black',
   },
   textListGrey: {
     fontSize: 18,
     color: Colors.placeholder,
   },
 });
-export default Registration;
+export default Index;

@@ -4,7 +4,6 @@ import {
   RefreshControl,
   ScrollView,
   StatusBar,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -12,7 +11,6 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 
 import Button from "@/components/shared/button/Button";
-import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useProjectsStore } from "@/states/projects.state";
 import { useRouter } from "expo-router";
@@ -66,7 +64,7 @@ const ProjectList = () => {
       <Button
         text={item.name}
         className="w-[300px]"
-        onPress={() => router.push(`/tabPage/projectList/${item.id}/`)}
+        onPress={() => router.push(`/projects/projectList/${item.id}/`)}
       >
         <Text className="text-xl text-white ">{item.name}</Text>
       </Button>

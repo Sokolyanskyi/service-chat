@@ -33,17 +33,17 @@ const ProjectPage = () => {
         <Text className="text-4xl">{project.name}</Text>
         <Button
           text={"Edit Project"}
-          onPress={() => router.push(`/tabPage/projectList/${id}/edit`)}
+          onPress={() => router.push(`/projects/projectList/${id}/edit`)}
           className="w-[300px]"
         />
         <Button
           text={"View Project"}
-          onPress={() => router.push(`/tabPage/projectList/${id}/view`)}
+          onPress={() => router.push(`/projects/projectList/${id}/view`)}
           className="w-[300px]"
         />
         <Button
           text={"Chat"}
-          onPress={() => router.push(`/tabPage/projectList/${id}/chat`)}
+          onPress={() => router.push(`/projects/projectList/${id}/chat`)}
           className="w-[300px]"
         />
       </View>

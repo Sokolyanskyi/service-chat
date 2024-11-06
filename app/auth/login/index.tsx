@@ -1,29 +1,28 @@
-import * as yup from "yup";
+import * as yup from 'yup';
 
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { FieldValues, useForm } from "react-hook-form";
-import { FontSize, Gaps } from "@/components/shared/tokens";
-import React, { useState } from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FieldValues, useForm } from 'react-hook-form';
+import { FontSize } from '@/components/shared/tokens';
+import React from 'react';
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Button from "@/components/shared/button/Button";
-import { Colors } from "@/constants/Colors";
-import InputController from "@/components/shared/input/input";
-import { LOGIN } from "@/states/routes";
-import { SafeAreaView } from "react-native-safe-area-context";
-import axios from "axios";
-import { useRouter } from "expo-router";
-import { yupResolver } from "@hookform/resolvers/yup";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Button from '@/components/shared/button/Button';
+import InputController from '@/components/shared/input/input';
+import { LOGIN } from '@/states/routes';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import axios from 'axios';
+import { useRouter } from 'expo-router';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const loginFormSchema = yup.object().shape({
   email: yup
     .string()
-    .email("Please enter a valid email")
-    .required("Email is required"),
+    .email('Please enter a valid email')
+    .required('Email is required'),
   password: yup
     .string()
-    .required("Password is required")
-    .min(8, "Password must be at least 8 characters"),
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters'),
 });
 
 const Login = () => {
@@ -33,17 +32,17 @@ const Login = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(loginFormSchema), mode: "onChange" });
-
+  } = useForm({ resolver: yupResolver(loginFormSchema), mode: 'onChange' });
+  /* eslint-disable */
   const handlePress = () => {
-    router.push("/tabs/registration");
+    router.push('/auth/registration');
   };
 
   const alert = (text: string) => {
-    Alert.alert("Error", `${text}`, [
+    Alert.alert('Error', `${text}`, [
       {
-        text: "Close",
-        style: "cancel",
+        text: 'Close',
+        style: 'cancel',
       },
     ]);
   };
@@ -54,9 +53,9 @@ const Login = () => {
         email: data.email.toLowerCase(),
         password: data.password,
       });
-      await AsyncStorage.setItem("access_token", res.data.Bearer.accessToken);
-      await AsyncStorage.setItem("user_data", JSON.stringify(res.data.data));
-      router.replace("/tabPage");
+      await AsyncStorage.setItem('access_token', res.data.Bearer.accessToken);
+      await AsyncStorage.setItem('user_data', JSON.stringify(res.data.data));
+      router.replace('/projects');
       console.log(res.data.data);
     } catch (err: any) {
       alert(JSON.stringify(err.response.data));
@@ -72,19 +71,23 @@ const Login = () => {
             errors={errors}
             name="email"
             control={control}
-            placeholder={"Please enter email"}
+            placeholder={'Please enter email'}
             props={{
-              keyboardType: "email-address",
+              keyboardType: 'email-address',
             }}
           />
           <InputController
             errors={errors}
             name="password"
             control={control}
-            placeholder={"Please enter password"}
+            placeholder={'Please enter password'}
             isPassword={true}
           />
-          <Button text={"Login"} onPress={handleSubmit(login)} />
+          <Button
+            text={'Login'}
+            onPress={handleSubmit(login)}
+            className="animate-pulse"
+          />
         </View>
         <View style={styles.singup}>
           <Text>If you dont have account please </Text>
@@ -103,19 +106,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 45,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   text: {
     fontSize: FontSize.fs30,
   },
   content: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  form: { alignSelf: "stretch" },
+  form: { alignSelf: 'stretch' },
   singup: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 35,
   },
 });

@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  Button,
   SafeAreaView,
   StyleSheet,
   View,
@@ -9,7 +8,6 @@ import { Bubble, GiftedChat, IMessage } from "react-native-gifted-chat";
 import React, {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useState,
 } from "react";
 

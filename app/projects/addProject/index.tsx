@@ -1,44 +1,44 @@
-import * as yup from "yup";
+import * as yup from 'yup';
+/* eslint-disable */
+import { ScrollView, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 
-import { Alert, ScrollView, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Button from "@/components/shared/button/Button";
-import DateInput from "@/components/DatePicker";
-import InputController from "@/components/shared/input/input";
-import { PROJECTS } from "@/states/routes";
-import { SafeAreaView } from "react-native-safe-area-context";
-import axios from "axios";
-import { useForm } from "react-hook-form";
-import { useRouter } from "expo-router";
-import { yupResolver } from "@hookform/resolvers/yup";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Button from '@/components/shared/button/Button';
+import DateInput from '@/components/DatePicker';
+import InputController from '@/components/shared/input/input';
+import { PROJECTS } from '@/states/routes';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'expo-router';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const AddProject = () => {
   const router = useRouter();
-  const [token, setToken] = useState<any>();
+  const [token, setToken] = useState<string | null>();
 
   const addProjectFormSchema = yup.object().shape({
-    projectName: yup.string().required("Project name is required"),
-    city: yup.string().required("City is required"),
-    address: yup.string().required("Address is required"),
-    date: yup.date().required("Commissioning Completion Date is required"),
+    projectName: yup.string().required('Project name is required'),
+    city: yup.string().required('City is required'),
+    address: yup.string().required('Address is required'),
+    date: yup.date().required('Commissioning Completion Date is required'),
     qSystem: yup
       .string()
-      .matches(/[0-9]/, "Quantity of System must be a integer")
-      .required("Quantity of System is required"),
+      .matches(/[0-9]/, 'Quantity of System must be a integer')
+      .required('Quantity of System is required'),
     qOutdoor: yup
       .string()
-      .matches(/[0-9]/, "Quantity of Outdoor Unit must be a integer")
-      .required("Quantity of Outdoor Unit is required"),
+      .matches(/[0-9]/, 'Quantity of Outdoor Unit must be a integer')
+      .required('Quantity of Outdoor Unit is required'),
   });
 
   const checkToken = async () => {
     try {
-      const token = await AsyncStorage.getItem("access_token");
+      const token = await AsyncStorage.getItem('access_token');
       setToken(token);
     } catch (error) {
-      console.error("Ошибка при проверке токена:", error);
+      console.error('Ошибка при проверке токена:', error);
       alert(`${error}`);
     }
   };
@@ -52,7 +52,7 @@ const AddProject = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(addProjectFormSchema),
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   //   const alert = (text: string) => {
@@ -96,15 +96,15 @@ const AddProject = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
           },
-        }
+        },
       );
       console.log(dataForm);
 
       console.log(data);
-      router.replace("/tabPage");
+      router.replace('/projects/projectList');
     } catch (err: any) {
       console.log(err.response.data);
     }
@@ -122,19 +122,19 @@ const AddProject = () => {
             <View className="w-[300px]">
               <InputController
                 errors={errors}
-                placeholder={"Project Name"}
+                placeholder={'Project Name'}
                 control={control}
                 name="projectName"
               />
               <InputController
                 errors={errors}
-                placeholder={"City"}
+                placeholder={'City'}
                 control={control}
                 name="city"
               />
               <InputController
                 errors={errors}
-                placeholder={"Address"}
+                placeholder={'Address'}
                 control={control}
                 name="address"
               />
@@ -142,23 +142,23 @@ const AddProject = () => {
 
               <InputController
                 errors={errors}
-                placeholder={"Quantity of System"}
+                placeholder={'Quantity of System'}
                 control={control}
                 name="qSystem"
               />
               <InputController
                 errors={errors}
-                placeholder={"Quantity of Outdoor Unit"}
+                placeholder={'Quantity of Outdoor Unit'}
                 control={control}
                 name="qOutdoor"
               />
 
               <Button
-                text={"Add Photos"}
-                onPress={() => console.log("Add Photos")}
+                text={'Add Photos'}
+                onPress={() => console.log('Add Photos')}
               />
               <Button
-                text={"Add Project"}
+                text={'Add Project'}
                 onPress={handleSubmit(addProjectForm)}
               />
             </View>

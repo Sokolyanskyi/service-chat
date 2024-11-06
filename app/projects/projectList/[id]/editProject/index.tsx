@@ -14,7 +14,7 @@ import { useRouter } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import HeaderBar from '@/components/shared/HeaderBar/HeaderBar';
 
-const AddProject = () => {
+const EditProject = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>();
 
@@ -158,10 +158,7 @@ const AddProject = () => {
                 text={'Add Photos'}
                 onPress={() => console.log('Add Photos')}
               />
-              <Button
-                text={'Add Project'}
-                onPress={handleSubmit(addProjectForm)}
-              />
+              <Button text={'Save'} onPress={handleSubmit(addProjectForm)} />
             </View>
           </View>
         </View>
@@ -170,4 +167,4 @@ const AddProject = () => {
   );
 };
 
-export default AddProject;
+export default EditProject;

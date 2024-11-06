@@ -1,13 +1,14 @@
 import React from 'react';
 
-import {Text} from 'react-native';
+import { Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const RestorePassword = () => {
-    return (
-        <Text>
-            RestorePassword
-        </Text>
-    );
+  return (
+    <SafeAreaView className="flex-1 justify-center items-center">
+      <Text>Restore Password</Text>
+    </SafeAreaView>
+  );
 };
 
 export default RestorePassword;

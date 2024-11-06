@@ -7,13 +7,11 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
-
-import Button from "@/components/shared/button/Button";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useProjectsStore } from "@/states/projects.state";
-import { useRouter } from "expo-router";
+} from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useProjectsStore } from '@/states/projects.state';
+import { useRouter } from 'expo-router';
+import HeaderBarProjectList from '@/components/shared/HeaderBar/HeaderBarProjectList';
 
 interface Project {
   id: number;
@@ -44,43 +42,40 @@ const ProjectList = () => {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center">
+      <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" />
-      </SafeAreaView>
+      </View>
     );
   }
   if (projects.length === 0) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center">
+      <View className="flex-1 justify-center items-center">
         <View>
           <Text>No projects found.</Text>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   const renderItem = ({ item }: { item: Project }) => (
-    <TouchableOpacity className="items-center justify-center gap-3">
-      <Button
-        text={item.name}
-        className="w-[300px]"
-        onPress={() => router.push(`/projects/projectList/${item.id}/`)}
-      >
-        <Text className="text-xl text-white ">{item.name}</Text>
-      </Button>
+    <TouchableOpacity
+      className="items-start justify-center p-2 bg-[#00b3ac] border-2 border-gray-300 w-80 mb-2 rounded-xl ml-2"
+      onPress={() => router.push(`/projects/projectList/${item.id}/chat`)}
+    >
+      <Text className="text-xl text-white font-bold">{item.name}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView className="flex-1 justify-center items-center ">
+    <View className="flex-1 justify-center items-center ">
+      <HeaderBarProjectList />
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        className="w-full "
+        className="w-full z-0"
       >
         <StatusBar barStyle="dark-content" />
-        <View className="items-center justify-center mb-16 mt-5">
-          <Text className="text-4xl mb-2">Project List</Text>
+        <View className="items-start justify-center mb-16 mt-5 z-0">
           <FlatList
             scrollEnabled={false}
             data={projects}
@@ -89,7 +84,7 @@ const ProjectList = () => {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={onRefresh}
-                colors={["#9Bd35A", "#689F38"]}
+                colors={['#9Bd35A', '#689F38']}
                 tintColor="#689F38" // Цвет для iOS
               />
             }
@@ -97,7 +92,7 @@ const ProjectList = () => {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

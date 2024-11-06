@@ -40,7 +40,7 @@ const WelcomePage = () => {
     return null;
   }
   if (isAuthenticated) {
-    return <Redirect href="/projects" />;
+    return <Redirect href="/projects/projectList" />;
   }
 
   return (
@@ -48,8 +48,8 @@ const WelcomePage = () => {
       <StatusBar barStyle="dark-content" />
       <View className="mb-10">
         <Image
-          source={require('../../assets/images/logo.png')}
-          className="w-[300px] h-[47px]"
+          source={require('../../assets/images/Hisense-Logo.png')}
+          className="w-[400px] h-[80px]"
         />
       </View>
       <View className="mb-5">

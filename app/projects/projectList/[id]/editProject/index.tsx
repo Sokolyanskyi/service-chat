@@ -1,22 +1,48 @@
 import * as yup from 'yup';
 /* eslint-disable */
-import { ScrollView, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Button from '@/components/shared/button/Button';
 import DateInput from '@/components/DatePicker';
 import InputController from '@/components/shared/input/input';
 import { PROJECTS } from '@/states/routes';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import HeaderBar from '@/components/shared/HeaderBar/HeaderBar';
+import { useProjectStore } from '@/states/project.state';
+import { useProjectsStore } from '@/states/projects.state';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const EditProject = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>();
+
+  const project = useProjectStore((state) => state.project);
+  const getProject = useProjectStore((state) => state.getProject);
+  const isLoading = useProjectsStore((state) => state.isLoading);
+
+  const { id } = useLocalSearchParams();
+  useEffect(() => {
+    if (id) getProject(id);
+  }, []);
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" />
+      </SafeAreaView>
+    );
+  }
+
+  console.log(project.name);
 
   const addProjectFormSchema = yup.object().shape({
     projectName: yup.string().required('Project name is required'),
@@ -53,25 +79,16 @@ const EditProject = () => {
   } = useForm({
     resolver: yupResolver(addProjectFormSchema),
     mode: 'onChange',
+    defaultValues: {
+      projectName: project.name,
+      city: project.city,
+      address: project.address,
+      date: new Date(project.commissioningCompletionDate.toString()),
+      qSystem: project.quantityOfSystem.toString(),
+      qOutdoor: project.quantityOfOutdoorUnit.toString(),
+    },
   });
 
-  //   const alert = (text: string) => {
-  //     if (text === "") {
-  //       Alert.alert("Warning", `please enter some information`, [
-  //         {
-  //           text: "I am going to",
-  //           style: "cancel",
-  //         },
-  //       ]);
-  //     } else {
-  //       Alert.alert("Added project", `${text}`, [
-  //         {
-  //           text: "Good!",
-  //           style: "cancel",
-  //         },
-  //       ]);
-  //     }
-  //   };
   interface dataForm {
     projectName: string;
     city: string;
@@ -154,11 +171,20 @@ const EditProject = () => {
                 name="qOutdoor"
               />
 
-              <Button
-                text={'Add Photos'}
-                onPress={() => console.log('Add Photos')}
-              />
-              <Button text={'Save'} onPress={handleSubmit(addProjectForm)} />
+              <View className="flex-row gap-6 mt-14 w-full">
+                <TouchableOpacity
+                  className=" justify-center items-center p-2 bg-red-400 border-2 border-gray-300 w-40 mb-2 rounded-xl"
+                  onPress={() => router.replace('/projects/projectList')}
+                >
+                  <Text className="color-white text-2xl">Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  className="justify-center items-center p-2 bg-[#00b3ac] border-2 border-gray-300 w-40 mb-2 rounded-xl"
+                  onPress={handleSubmit(addProjectForm)}
+                >
+                  <Text className="color-white text-2xl">Save</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>

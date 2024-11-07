@@ -1,10 +1,11 @@
-import { ActivityIndicator, StatusBar, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import { ActivityIndicator, StatusBar, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
 
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useLocalSearchParams } from "expo-router";
-import { useProjectStore } from "@/states/project.state";
-import { useProjectsStore } from "@/states/projects.state";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useLocalSearchParams } from 'expo-router';
+import { useProjectStore } from '@/states/project.state';
+import { useProjectsStore } from '@/states/projects.state';
+import HeaderBarProjectView from '@/components/shared/HeaderBar/HeaderBarProjectView';
 
 const ProjectPage = () => {
   const project = useProjectStore((state) => state.project);
@@ -23,42 +24,45 @@ const ProjectPage = () => {
     );
   }
 
-  console.log(id);
+  console.log(project.name);
   return (
-    <SafeAreaView className="flex-1 justify-center items-center">
+    <View className="flex-1 ">
+      <HeaderBarProjectView name={project.name} />
       <StatusBar barStyle="dark-content" />
-      <Text className="text-4xl mb-4">{project.name}</Text>
-      <View className="gap-3 justify-center items-center">
-        <View className="justify-center items-center">
-          <Text className="text-2xl">id:</Text>
-          <Text>{project.id}</Text>
+
+      <View className="ml-4 gap-3   mt-8">
+        <View className="flex-row items-center">
+          <Text className="text-2xl font-bold">id:</Text>
+          <Text className="text-xl">{project.id}</Text>
         </View>
-        <View className="justify-center items-center">
-          <Text className="text-2xl">name:</Text>
-          <Text>{project.name}</Text>
+        <View className="flex-row items-center">
+          <Text className="text-2xl font-bold">name:</Text>
+          <Text className="text-xl">{project.name}</Text>
         </View>
-        <View className="justify-center items-center">
-          <Text className="text-2xl">city:</Text>
-          <Text>{project.city}</Text>
+        <View className="flex-row items-center">
+          <Text className="text-2xl font-bold">city:</Text>
+          <Text className="text-xl">{project.city}</Text>
         </View>
-        <View className="justify-center items-center">
-          <Text className="text-2xl">address:</Text>
-          <Text>{project.address}</Text>
+        <View className="flex-row items-center">
+          <Text className="text-2xl font-bold">address:</Text>
+          <Text className="text-xl">{project.address}</Text>
         </View>
-        <View className="justify-center items-center">
-          <Text className="text-2xl">commissioning Completion Date:</Text>
-          <Text>{project.commissioningCompletionDate}</Text>
+        <View className="flex-row items-center">
+          <Text className="text-2xl font-bold">
+            commissioning Completion Date:
+          </Text>
+          <Text className="text-xl">{project.commissioningCompletionDate}</Text>
         </View>
-        <View className="justify-center items-center">
-          <Text className="text-2xl">quantityOfSystem:</Text>
-          <Text>{project.quantityOfSystem}</Text>
+        <View className="flex-row items-center">
+          <Text className="text-2xl font-bold">quantityOfSystem:</Text>
+          <Text className="text-xl">{project.quantityOfSystem}</Text>
         </View>
-        <View className="justify-center items-center">
-          <Text className="text-2xl">quantityOfOutdoorUnit:</Text>
-          <Text>{project.quantityOfOutdoorUnit}</Text>
+        <View className="flex-row items-center">
+          <Text className="text-2xl font-bold">quantityOfOutdoorUnit:</Text>
+          <Text className="text-xl">{project.quantityOfOutdoorUnit}</Text>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

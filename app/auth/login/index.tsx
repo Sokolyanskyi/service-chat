@@ -74,7 +74,7 @@ const Login = () => {
         <View className="mb-10">
           <Image
             source={require('../../../assets/images/Hisense-Logo.png')}
-            className="w-[400px] h-[80px]"
+            className="w-[350px] h-[80px]"
           />
         </View>
         <Text className="text-4xl text-center mb-6 font-bold color-emerald-600">

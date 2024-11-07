@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 /* eslint-disable */
-import { ScrollView, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -55,23 +55,6 @@ const AddProject = () => {
     mode: 'onChange',
   });
 
-  //   const alert = (text: string) => {
-  //     if (text === "") {
-  //       Alert.alert("Warning", `please enter some information`, [
-  //         {
-  //           text: "I am going to",
-  //           style: "cancel",
-  //         },
-  //       ]);
-  //     } else {
-  //       Alert.alert("Added project", `${text}`, [
-  //         {
-  //           text: "Good!",
-  //           style: "cancel",
-  //         },
-  //       ]);
-  //     }
-  //   };
   interface dataForm {
     projectName: string;
     city: string;
@@ -158,10 +141,20 @@ const AddProject = () => {
                 text={'Add Photos'}
                 onPress={() => console.log('Add Photos')}
               />
-              <Button
-                text={'Add Project'}
-                onPress={handleSubmit(addProjectForm)}
-              />
+              <View className="flex-row gap-6 mt-14 w-full">
+                <TouchableOpacity
+                  className=" justify-center items-center p-2 bg-red-400 border-2 border-gray-300 w-40 mb-2 rounded-xl"
+                  onPress={() => router.replace('/projects/projectList')}
+                >
+                  <Text className="color-white text-2xl">Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  className="justify-center items-center p-2 bg-[#00b3ac] border-2 border-gray-300 w-40 mb-2 rounded-xl"
+                  onPress={handleSubmit(addProjectForm)}
+                >
+                  <Text className="color-white text-2xl">Save</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>

@@ -49,7 +49,7 @@ const WelcomePage = () => {
       <View className="mb-10">
         <Image
           source={require('../../assets/images/Hisense-Logo.png')}
-          className="w-[400px] h-[80px]"
+          className="w-[350px] h-[80px]"
         />
       </View>
       <View className="mb-5">

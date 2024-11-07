@@ -1,52 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useProjectStore } from '@/states/project.state';
-import { useProjectsStore } from '@/states/projects.state';
 
-export default function HeaderBarChat() {
+export default function HeaderBarProjectView({ name }) {
   const router = useRouter();
   const pathname = usePathname();
   const [menuVisible, setMenuVisible] = useState(false);
   const [route, setRoute] = useState('');
   const currentRoute = pathname?.split('/').pop();
   console.log(pathname.split('/').pop());
-  const project = useProjectStore((state) => state.project);
-  const getProject = useProjectStore((state) => state.getProject);
-  const isLoading = useProjectsStore((state) => state.isLoading);
-
-  const { id } = useLocalSearchParams();
-  useEffect(() => {
-    if (id) getProject(id);
-  }, []);
-  if (isLoading) {
-    return (
-      <SafeAreaView className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" />
-      </SafeAreaView>
-    );
-  }
   const handleLogout = async () => {
     await AsyncStorage.removeItem('access_token');
     router.replace('/welcome');
   };
 
   useEffect(() => {
-    if (currentRoute === 'chat') {
-      setRoute('Chat');
+    if (currentRoute === 'viewProject') {
+      setRoute(`Project/${name}`);
     }
   }, []);
+
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
-  const idPath = pathname.split('/')[3];
+  const id = pathname.split('/')[3];
   console.log(id);
 
-  if (currentRoute === 'chat') {
+  if (currentRoute === 'viewProject') {
     return (
       <SafeAreaView className="flex-row items-center justify-between p-4 bg-gray-100 border-b border-gray-300 w-full z-50">
         {/* Бургер-меню слева */}
@@ -55,18 +39,19 @@ export default function HeaderBarChat() {
             <FontAwesome name="bars" size={24} color="black" />
           </TouchableOpacity>
           <Text className="font-bold text-2xl">
-            {route?.replace(/-/g, ' ')}/{project?.name}
+            {route?.replace(/-/g, ' ')}
           </Text>
         </View>
+
         {/* Иконки справа */}
         <View className="flex-row mr-5">
           <TouchableOpacity
             onPress={() =>
-              router.push(`/projects/projectList/${idPath}/viewProject`)
+              router.push(`/projects/projectList/${id}/editProject`)
             }
             className="ml-4"
           >
-            <MaterialIcons name="article" size={24} color="black" />
+            <MaterialIcons name="edit" size={24} color="black" />
           </TouchableOpacity>
         </View>
 

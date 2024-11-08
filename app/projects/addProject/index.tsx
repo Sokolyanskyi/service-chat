@@ -100,9 +100,9 @@ const AddProject = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        className="mt-8"
+        className="mt-8 mb-56 "
       >
-        <View className="flex-1 justify-center items-center mb-24">
+        <View className="flex-1 justify-center items-center mb-52 ">
           <View className="gap-3 justify-center items-center">
             <View className="w-[300px]">
               <InputController

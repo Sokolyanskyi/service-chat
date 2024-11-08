@@ -49,7 +49,7 @@ export const useChatStore = create<ChatStore>()((set) => ({
       try {
         const { data } = await axios.post(
           CHAT_UID + `${uid}/send-message`,
-          text,
+          { message: text },
           {
             headers: {
               Authorization: 'Bearer ' + token,
@@ -58,15 +58,15 @@ export const useChatStore = create<ChatStore>()((set) => ({
             },
           },
         );
-
+        console.log(data);
         const resMessage: any = {
           id: messages._id,
-          text: data.text,
+          text: data.message,
           created_at: data.created_at,
           user: {
             _id: data.user,
             name: data.user,
-            avatar: data.user,
+            avatar: '',
           },
         };
 
@@ -80,6 +80,7 @@ export const useChatStore = create<ChatStore>()((set) => ({
         });
       } catch (err) {
         set({ isLoading: false });
+
         console.error(err);
       } finally {
         set({ isLoading: false });

@@ -21,7 +21,7 @@ const Chat = () => {
     const timer = setTimeout(() => setIsReady(true), 100);
     return () => clearTimeout(timer);
   }, []);
-
+  console.log(fetchedMessages);
   const onSend = useCallback((newMessages: IMessage[] = []) => {
     const resMessage: IMessage = {
       _id: newMessages[0]._id,
@@ -46,7 +46,7 @@ const Chat = () => {
   const switchUser = () => {
     setCurrentUserId((prevId) => (prevId === 1 ? 2 : 1));
   };
-
+  fetchedMessages.map((message) => console.log(message));
   return (
     <View className="flex-1">
       <HeaderBarChat />
@@ -55,18 +55,19 @@ const Chat = () => {
           alwaysShowSend={true}
           messages={fetchedMessages.map((message: any) => ({
             _id: message.id,
-            text: message.text,
+            text: message.message,
             createdAt: message.created_at,
             user: {
               _id: 1,
-              name: message.user.name,
+              name: message.user,
               avatar: message.user.avatar,
             },
           }))}
           onSend={(messages) => {
+            console.log(messages);
             onSend(messages);
           }}
-          user={{ _id: currentUserId }}
+          user={{ _id: 1 }}
           renderBubble={(props) => (
             <Bubble
               {...props}

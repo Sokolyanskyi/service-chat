@@ -4,11 +4,11 @@
     "slug": "ServiceChat",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/iconHi.png",
+    "icon": "./assets/images/icon-Hi.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/Hisense-Logo.png",
+      "image": "./assets/images/iconHi.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -25,7 +25,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icon-Hi.png"
     },
     "plugins": [
       "expo-router"

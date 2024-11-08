@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import axios from "axios";
-import { CHAT_UID } from "@/states/routes";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GiftedChat, IMessage } from "react-native-gifted-chat";
+import { create } from 'zustand';
+import axios from 'axios';
+import { CHAT_UID } from '@/states/routes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
 interface ChatStore {
   messages: IMessage[];
@@ -15,8 +15,8 @@ export const useChatStore = create<ChatStore>()((set) => ({
   messages: [],
   isLoading: false,
   getMessages: async () => {
-    const token = await AsyncStorage.getItem("access_token");
-    const uid = await AsyncStorage.getItem("chat_uid");
+    const token = await AsyncStorage.getItem('access_token');
+    const uid = await AsyncStorage.getItem('chat_uid');
     console.log(uid, token);
 
     if (token && uid) {
@@ -24,9 +24,9 @@ export const useChatStore = create<ChatStore>()((set) => ({
         set({ isLoading: true });
         const { data } = await axios.get(CHAT_UID + `${uid}/messages`, {
           headers: {
-            Authorization: "Bearer " + token,
-            "Content-Type": "application/json",
-            Accept: "application/json",
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
           },
         });
 
@@ -40,8 +40,8 @@ export const useChatStore = create<ChatStore>()((set) => ({
     }
   },
   setMessages: async (messages: any) => {
-    const token = await AsyncStorage.getItem("access_token");
-    const uid = await AsyncStorage.getItem("chat_uid");
+    const token = await AsyncStorage.getItem('access_token');
+    const uid = await AsyncStorage.getItem('chat_uid');
     const text = messages.text;
 
     set({ isLoading: true });
@@ -52,11 +52,11 @@ export const useChatStore = create<ChatStore>()((set) => ({
           text,
           {
             headers: {
-              Authorization: "Bearer " + token,
-              "Content-Type": "application/json",
-              Accept: "application/json",
+              Authorization: 'Bearer ' + token,
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
             },
-          }
+          },
         );
 
         const resMessage: any = {
@@ -72,7 +72,7 @@ export const useChatStore = create<ChatStore>()((set) => ({
 
         set((state) => {
           const newMessages = GiftedChat.append(state.messages, resMessage);
-          console.log("New messages state:", newMessages);
+          console.log('New messages state:', newMessages);
           return {
             messages: newMessages,
             isLoading: false,

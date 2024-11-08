@@ -3,8 +3,8 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { usePathname, useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { handleLogout } from '@/app/utils/logout';
 
 export default function HeaderBarProjectView({ name }) {
   const router = useRouter();
@@ -13,10 +13,6 @@ export default function HeaderBarProjectView({ name }) {
   const [route, setRoute] = useState('');
   const currentRoute = pathname?.split('/').pop();
   console.log(pathname.split('/').pop());
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('access_token');
-    router.replace('/welcome');
-  };
 
   useEffect(() => {
     if (currentRoute === 'viewProject') {
@@ -66,7 +62,7 @@ export default function HeaderBarProjectView({ name }) {
             >
               <Text className="py-2 text-lg ">Projects</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleLogout}>
+            <TouchableOpacity onPress={() => handleLogout(router)}>
               <Text className="py-2 text-lg text-red-500">Sign Out</Text>
             </TouchableOpacity>
           </View>

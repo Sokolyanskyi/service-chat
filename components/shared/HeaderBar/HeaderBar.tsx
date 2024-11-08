@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProjectStore } from '@/states/project.state';
 import { useProjectsStore } from '@/states/projects.state';
+import { handleLogout } from '@/app/utils/logout';
 
 export default function HeaderBar() {
   const router = useRouter();
@@ -19,6 +19,7 @@ export default function HeaderBar() {
   const isLoading = useProjectsStore((state) => state.isLoading);
 
   const { id } = useLocalSearchParams();
+
   useEffect(() => {
     if (id) getProject(id);
   }, []);
@@ -29,10 +30,6 @@ export default function HeaderBar() {
       </SafeAreaView>
     );
   }
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('access_token');
-    router.replace('/welcome');
-  };
   useEffect(() => {
     if (currentRoute === 'projectList') {
       setRoute('Project list');
@@ -40,7 +37,7 @@ export default function HeaderBar() {
   }, []);
   useEffect(() => {
     if (currentRoute === 'editProject') {
-      setRoute('Edit project');
+      setRoute('Edit project/');
     }
   }, []);
   useEffect(() => {
@@ -62,7 +59,8 @@ export default function HeaderBar() {
           <FontAwesome name="bars" size={24} color="black" />
         </TouchableOpacity>
         <Text className="font-bold text-2xl">
-          {route?.replace(/-/g, ' ')}/{project?.name}
+          {route?.replace(/-/g, ' ')}
+          {project?.name}
         </Text>
       </View>
 
@@ -80,7 +78,7 @@ export default function HeaderBar() {
           >
             <Text className="py-2 text-lg ">Projects</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleLogout}>
+          <TouchableOpacity onPress={() => handleLogout(router)}>
             <Text className="py-2 text-lg text-red-500">Sign Out</Text>
           </TouchableOpacity>
         </View>

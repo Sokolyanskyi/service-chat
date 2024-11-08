@@ -1,16 +1,18 @@
 import React from 'react';
 
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputController from '@/components/shared/input/input';
 import Button from '@/components/shared/button/Button';
-import { FontSize } from '@/components/shared/tokens';
+import useRestorePasswordState from '@/states/restorePassword.state';
 import { router } from 'expo-router';
 
 const RestorePassword = () => {
+  const { setEmail, getErrors } = useRestorePasswordState();
+
   const restorePasswordFormSchema = yup.object().shape({
     email: yup
       .string()
@@ -20,14 +22,28 @@ const RestorePassword = () => {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(restorePasswordFormSchema),
     mode: 'onChange',
   });
-  const restorePassword = async (data) => {
-    console.log(data);
-    router.replace('/auth/restorePassword/restoreCode');
+  const restorePassword = async (data: { email: string }) => {
+    try {
+      await setEmail(data.email);
+
+      const serverErrors = getErrors();
+      if (serverErrors?.code) {
+        setError('email', { message: serverErrors.code });
+
+        return; // Не переходим на другую страницу
+      }
+
+      router.replace('/auth/restorePassword/restoreCode');
+    } catch (error) {
+      console.error('Ошибка при отправке email:', error);
+      Alert.alert('Ошибка', 'Не удалось отправить email');
+    }
   };
   return (
     <SafeAreaView className="flex-1 justify-center items-center">
@@ -52,20 +68,5 @@ const RestorePassword = () => {
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 45,
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: FontSize.fs30,
-  },
-  content: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  form: { alignSelf: 'stretch' },
-});
 
 export default RestorePassword;

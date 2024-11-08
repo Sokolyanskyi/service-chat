@@ -11,6 +11,7 @@ interface Project {
   commissioningCompletionDate: string;
   quantityOfSystem: number;
   quantityOfOutdoorUnit: number;
+  cratedAt: string;
 }
 
 type Store = {

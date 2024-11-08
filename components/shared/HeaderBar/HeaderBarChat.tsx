@@ -3,10 +3,10 @@ import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useProjectStore } from '@/states/project.state';
 import { useProjectsStore } from '@/states/projects.state';
+import { handleLogout } from '@/app/utils/logout';
 
 export default function HeaderBarChat() {
   const router = useRouter();
@@ -30,10 +30,6 @@ export default function HeaderBarChat() {
       </SafeAreaView>
     );
   }
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('access_token');
-    router.replace('/welcome');
-  };
 
   useEffect(() => {
     if (currentRoute === 'chat') {
@@ -81,7 +77,7 @@ export default function HeaderBarChat() {
             >
               <Text className="py-2 text-lg ">Projects</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleLogout}>
+            <TouchableOpacity onPress={() => handleLogout(router)}>
               <Text className="py-2 text-lg text-red-500">Sign Out</Text>
             </TouchableOpacity>
           </View>

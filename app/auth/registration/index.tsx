@@ -153,7 +153,7 @@ const Index = () => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
       >
-        <View className="flex-1 justify-center mt-2">
+        <View className="flex-1 justify-center mt-2 mb-28">
           <View className="justify-center items-center  ">
             <Text className="text-4xl mb-10 mt-5 font-bold color-teal-700">
               Registration

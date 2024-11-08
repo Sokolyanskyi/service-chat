@@ -21,6 +21,7 @@ interface Project {
   commissioningCompletionDate: string;
   quantityOfSystem: number;
   quantityOfOutdoorUnit: number;
+  createdAt: string;
 }
 
 const ProjectList = () => {
@@ -34,6 +35,7 @@ const ProjectList = () => {
     setRefreshing(true);
     getProjects();
     setRefreshing(false);
+    console.log(projects);
   }, [getProjects]);
 
   const onRefresh = useCallback(() => {
@@ -49,9 +51,12 @@ const ProjectList = () => {
   }
   if (projects.length === 0) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <View>
-          <Text>No projects found.</Text>
+      <View className="flex-1">
+        <HeaderBarProjectList />
+
+        <View className="justify-center items-center mt-4 gap-2">
+          <Text className="text-3xl font-bold">No projects found</Text>
+          <Text className="text-2xl">Add your first project</Text>
         </View>
       </View>
     );
@@ -63,6 +68,9 @@ const ProjectList = () => {
       onPress={() => router.push(`/projects/projectList/${item.id}/chat`)}
     >
       <Text className="text-xl text-white font-bold ml-2">{item.name}</Text>
+      <Text className="text-sm text-white ml-2">
+        {new Date(item.createdAt).toDateString()}
+      </Text>
     </TouchableOpacity>
   );
 

@@ -9,8 +9,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'expo-router';
 import { yupResolver } from '@hookform/resolvers/yup';
+import useRestorePasswordState from '@/states/restorePassword.state';
 
 const NewPassword = () => {
+  const { setPassword, clearState, getErrors } = useRestorePasswordState();
   const router = useRouter();
   const [optionName, setOptionName] = useState('');
   console.log(optionName);
@@ -49,14 +51,30 @@ const NewPassword = () => {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm({
     resolver: yupResolver(newPasswordFormSchema),
     mode: 'onChange',
   });
 
-  const register = async (data) => {
-    console.log(data);
-    router.replace('/auth/login');
+  const register = async (data: {
+    password: string;
+    password_confirmation: string;
+  }) => {
+    try {
+      await setPassword(data.password, data.password_confirmation);
+      const serverErrors = getErrors();
+      if (serverErrors?.code) {
+        setError('password', { message: serverErrors.code });
+        setError('password_confirmation', { message: serverErrors.code });
+        return;
+      }
+
+      clearState();
+      router.replace('/auth/login');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

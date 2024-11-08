@@ -8,8 +8,8 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { usePathname, useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { handleLogout } from '@/app/utils/logout';
 
 export default function HeaderBarProjectList() {
   const router = useRouter();
@@ -18,10 +18,7 @@ export default function HeaderBarProjectList() {
   const [route, setRoute] = useState('');
   const currentRoute = pathname?.split('/').pop();
   console.log(pathname.split('/').pop());
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('access_token');
-    router.replace('/welcome');
-  };
+
   const closeMenu = () => {
     setMenuVisible(false);
   };
@@ -70,7 +67,7 @@ export default function HeaderBarProjectList() {
             <TouchableOpacity
               onPress={() => router.replace(`/projects/projectList`)}
             ></TouchableOpacity>
-            <TouchableOpacity onPress={handleLogout}>
+            <TouchableOpacity onPress={() => handleLogout(router)}>
               <Text className="py-2 text-lg text-red-500">Sign Out</Text>
             </TouchableOpacity>
           </View>

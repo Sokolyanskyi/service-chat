@@ -1,5 +1,5 @@
-import { BorderRadius, Colors, FontSize } from "@/components/shared/tokens";
-import { Controller, FieldErrors, FieldValues } from "react-hook-form";
+import { BorderRadius, Colors, FontSize } from '@/components/shared/tokens';
+import { Controller, FieldErrors, FieldValues } from 'react-hook-form';
 import {
   Pressable,
   StyleSheet,
@@ -7,10 +7,10 @@ import {
   TextInput,
   TextInputProps,
   View,
-} from "react-native";
-import React, { useState } from "react";
+} from 'react-native';
+import React, { useState } from 'react';
 
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5 } from '@expo/vector-icons';
 
 interface ControllerInputProps {
   control: any;
@@ -45,7 +45,7 @@ const InputController: React.FC<ControllerInputProps> = ({
         <Controller
           name={name}
           control={control}
-          render={({ field: { onChange, onBlur, value } }: any) => (
+          render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               {...props}
               onChangeText={onChange}
@@ -85,21 +85,21 @@ const styles = StyleSheet.create({
     height: 58,
     paddingHorizontal: 24,
     borderRadius: BorderRadius.r10,
-    backgroundColor: "#e1eeea",
+    backgroundColor: '#e1eeea',
     fontSize: FontSize.fs16,
   },
   inputError: {
     height: 58,
     paddingHorizontal: 24,
     borderRadius: BorderRadius.r10,
-    backgroundColor: "#e1eeea",
+    backgroundColor: '#e1eeea',
 
-    borderColor: "#ec4e4e",
+    borderColor: '#ec4e4e',
     borderWidth: 1,
     fontSize: FontSize.fs16,
   },
   eyeIcon: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     top: 0,
     paddingHorizontal: 20,
@@ -107,16 +107,16 @@ const styles = StyleSheet.create({
   },
 
   eyeIconError: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     top: 0,
     paddingHorizontal: 20,
     paddingVertical: 18,
   },
   textError: {
-    color: "#f15050",
+    color: '#f15050',
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 });
 export default InputController;

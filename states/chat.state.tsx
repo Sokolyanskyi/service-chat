@@ -1,90 +1,28 @@
+// store/chatStore.ts
 import { create } from 'zustand';
-import axios from 'axios';
-import { CHAT_UID } from '@/states/routes';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 
-interface ChatStore {
-  messages: IMessage[];
-  getMessages: () => Promise<void>;
-  isLoading: boolean;
-  setMessages: (messages: any) => Promise<void>;
+export interface Message {
+  _id: string;
+  text: string;
+  createdAt: Date;
+  user: {
+    _id: string;
+    name: string;
+    avatar?: string;
+  };
 }
 
-export const useChatStore = create<ChatStore>()((set) => ({
+interface ChatState {
+  messages: Message[];
+  role: 'admin' | 'user';
+  setMessages: (messages: Message[]) => void;
+  addMessage: (message: Message) => void;
+}
+
+export const useChatStore = create<ChatState>((set) => ({
   messages: [],
-  isLoading: false,
-  getMessages: async () => {
-    const token = await AsyncStorage.getItem('access_token');
-    const uid = await AsyncStorage.getItem('chat_uid');
-    console.log(uid, token);
-
-    if (token && uid) {
-      try {
-        set({ isLoading: true });
-        const { data } = await axios.get(CHAT_UID + `${uid}/messages`, {
-          headers: {
-            Authorization: 'Bearer ' + token,
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-        });
-
-        set({ messages: data.messages.reverse(), isLoading: false });
-      } catch (err) {
-        set({ isLoading: false });
-        console.error(err);
-      } finally {
-        set({ isLoading: false });
-      }
-    }
-  },
-  setMessages: async (messages: any) => {
-    const token = await AsyncStorage.getItem('access_token');
-    const uid = await AsyncStorage.getItem('chat_uid');
-    const text = messages.text;
-
-    set({ isLoading: true });
-    if (token && uid) {
-      try {
-        const { data } = await axios.post(
-          CHAT_UID + `${uid}/send-message`,
-          { message: text },
-          {
-            headers: {
-              Authorization: 'Bearer ' + token,
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-            },
-          },
-        );
-        console.log(data);
-        const resMessage: any = {
-          id: messages._id,
-          text: data.message,
-          created_at: data.created_at,
-          user: {
-            _id: data.user,
-            name: data.user,
-            avatar: '',
-          },
-        };
-
-        set((state) => {
-          const newMessages = GiftedChat.append(state.messages, resMessage);
-          console.log('New messages state:', newMessages);
-          return {
-            messages: newMessages,
-            isLoading: false,
-          };
-        });
-      } catch (err) {
-        set({ isLoading: false });
-
-        console.error(err);
-      } finally {
-        set({ isLoading: false });
-      }
-    }
-  },
+  role: 'user', // Устанавливаем роль по умолчанию
+  setMessages: (messages) => set({ messages }),
+  addMessage: (message) =>
+    set((state) => ({ messages: [message, ...state.messages] })),
 }));

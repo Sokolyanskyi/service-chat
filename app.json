@@ -4,7 +4,7 @@
     "slug": "ServiceChat",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon-Hi.png",
+    "icon": "./assets/images/HisenseIcon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {

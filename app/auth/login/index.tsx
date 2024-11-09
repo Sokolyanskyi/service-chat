@@ -1,15 +1,7 @@
 import * as yup from 'yup';
 
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
 import { FieldValues, useForm } from 'react-hook-form';
-import { FontSize } from '@/components/shared/tokens';
 import React from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -69,8 +61,8 @@ const Login = () => {
     }
   };
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+    <SafeAreaView className="flex-1 justify-center">
+      <View className="items-center justify-center w-[350px] mx-auto">
         <View className="mb-10">
           <Image
             source={require('../../../assets/images/Hisense-Logo.png')}
@@ -80,7 +72,7 @@ const Login = () => {
         <Text className="text-4xl text-center mb-6 font-bold color-emerald-600">
           Login
         </Text>
-        <View style={styles.form}>
+        <View className="w-full">
           <InputController
             errors={errors}
             name="email"
@@ -103,7 +95,7 @@ const Login = () => {
             className="animate-pulse"
           />
         </View>
-        <View style={styles.singup}>
+        <View className="justify-center items-center mt-10">
           <Text>If you dont have account please </Text>
           <TouchableOpacity
             onPress={handlePress}
@@ -112,7 +104,7 @@ const Login = () => {
             <Text className="text-[#00b3ac] text-lg font-bold">Sing Up</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.singup}>
+        <View className="items-center justify-center mt-10">
           <Text>Forgot your password?</Text>
           <Text>Click 'Restore Password' to reset it.</Text>
           <TouchableOpacity
@@ -128,24 +120,5 @@ const Login = () => {
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 45,
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: FontSize.fs30,
-  },
-  content: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  form: { alignSelf: 'stretch' },
-  singup: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 35,
-  },
-});
+
 export default Login;

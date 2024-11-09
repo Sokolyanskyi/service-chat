@@ -11,4 +11,5 @@ export const RESTOREPASSWORDRESET =
   'https://dev5.itcation.com/api/auth/password/reset';
 export const LOGIN = 'https://dev5.itcation.com/api/auth/login';
 export const REGISTER = 'https://dev5.itcation.com/api/auth/register';
-export const CHAT_UID = 'https://dev5.itcation.com/api/projects/';
+export const CHAT_UID = 'https://dev5.itcation.com/api/projects';
+export const ROUTE = 'https://dev5.itcation.com/api';

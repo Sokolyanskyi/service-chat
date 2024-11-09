@@ -1,99 +1,89 @@
-import { ActivityIndicator, View } from 'react-native';
-import { Bubble, GiftedChat, IMessage } from 'react-native-gifted-chat';
+// screens/ChatScreen.tsx
 import React, { useCallback, useEffect, useState } from 'react';
+import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import { useChatStore } from '@/states/chat.state';
+import {
+  fetchMessagesFromServer,
+  sendMessageToServer,
+} from '@/app/utils/chatUtils';
 import { useLocalSearchParams } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderBarChat from '@/components/shared/HeaderBar/HeaderBarChat';
+import { View } from 'react-native';
 
-const Chat = () => {
-  const [currentUserId, setCurrentUserId] = useState(1);
-  const [user, setUser] = useState('');
-  const fetchedMessages = useChatStore((state) => state.messages);
-  const getMessages = useChatStore((state) => state.getMessages);
-  const isLoading = useChatStore((state) => state.isLoading);
-  const [isReady, setIsReady] = useState(false);
-  const setMessages = useChatStore((state) => state.setMessages);
+const ChatScreen: React.FC = () => {
+  const [user, setUser] = useState({
+    country: '',
+    createdAt: '',
+    email: '',
+    id: 1,
+    lastname: '',
+    name: '',
+    phoneNumber: '',
+  });
+  const { messages, addMessage, setMessages, role } = useChatStore();
   const { id } = useLocalSearchParams();
-  useEffect(() => {
-    getMessages();
-  }, [setMessages]);
-  useEffect(() => {
-    const timer = setTimeout(() => setIsReady(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
-  console.log(fetchedMessages);
-  const onSend = useCallback((newMessages: IMessage[] = []) => {
-    const resMessage: IMessage = {
-      _id: newMessages[0]._id,
-      text: newMessages[0].text,
-      createdAt: newMessages[0].createdAt,
-      user: {
-        _id: newMessages[0].user._id,
-        name: 'Sok',
-        avatar: 'avatar',
-      },
-    };
-    setMessages(resMessage);
-  }, []);
 
-  // if (isLoading ) {
-  //     return (
-  //         <SafeAreaView style={styles.loadingContainer}>
-  //             <ActivityIndicator size="large"/>
-  //         </SafeAreaView>
-  //     );
-  // }
-  const switchUser = () => {
-    setCurrentUserId((prevId) => (prevId === 1 ? 2 : 1));
+  useEffect(() => {
+    fetchUser();
+  }, []);
+  const fetchUser = async () => {
+    const userStorageString = await AsyncStorage.getItem('user_data');
+    const userStorage = JSON.parse(userStorageString);
+
+    setUser(userStorage);
   };
-  fetchedMessages.map((message) => console.log(message));
-  return (
-    <View className="flex-1">
-      <HeaderBarChat />
-      {isReady ? (
-        <GiftedChat
-          alwaysShowSend={true}
-          messages={fetchedMessages.map((message: any) => ({
+  // Опрашиваем сервер для получения новых сообщений
+  useEffect(() => {
+    const fetchMessages = async () => {
+      console.log(user);
+      try {
+        const serverMessages = await fetchMessagesFromServer(id);
+        console.log(serverMessages);
+        const sortedMessages = serverMessages.map((message) => {
+          return {
             _id: message.id,
             text: message.message,
             createdAt: message.created_at,
-            user: {
-              _id: 1,
-              name: message.user,
-              avatar: message.user.avatar,
-            },
-          }))}
-          onSend={(messages) => {
-            console.log(messages);
-            onSend(messages);
-          }}
-          user={{ _id: 1 }}
-          renderBubble={(props) => (
-            <Bubble
-              {...props}
-              wrapperStyle={{
-                left: {
-                  backgroundColor: '#ddc3c3',
-                  marginLeft: -50,
-                },
-                right: {
-                  backgroundColor: '#5f9fd8',
-                  marginRight: 0,
-                  paddingRight: 10,
-                },
-              }}
-            />
-          )}
-        />
-      ) : (
-        <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" />
-        </View>
-      )}
+            user: { _id: user.id, name: user.name },
+            avatar: '',
+          };
+        });
+        console.log(sortedMessages);
+        setMessages(sortedMessages.reverse());
+      } catch (error) {
+        console.error();
+      }
+    };
 
-      {/*<Button title={`Switch to User ${currentUserId === 1 ? 2 : 1}`} onPress={switchUser} />*/}
+    fetchMessages();
+
+    // const interval = setInterval(fetchMessages, 5000); // опрос каждые 5 секунд
+    //
+    // return () => clearInterval(interval); // очищаем интервал при размонтировании
+  }, []);
+
+  // Отправка нового сообщения
+  const onSend = useCallback((newMessages: IMessage[] = []) => {
+    const [message] = newMessages;
+
+    addMessage(message);
+    sendMessageToServer(id, message.text); // отправляем сообщение на сервер
+  }, []);
+
+  return (
+    <View className="flex-1">
+      <HeaderBarChat />
+      <GiftedChat
+        messages={messages}
+        onSend={(newMessages) => onSend(newMessages)}
+        user={{
+          _id: user.id ? user.id : 1,
+          name: 'Sok',
+        }}
+      />
     </View>
   );
 };
 
-export default Chat;
+export default ChatScreen;

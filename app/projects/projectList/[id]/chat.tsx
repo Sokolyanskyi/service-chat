@@ -10,6 +10,7 @@ import { useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderBarChat from '@/components/shared/HeaderBar/HeaderBarChat';
 import { View } from 'react-native';
+import FeedbackModal from '@/components/Feedback/Feedbacl';
 
 const ChatScreen: React.FC = () => {
   const [user, setUser] = useState({
@@ -86,6 +87,7 @@ const ChatScreen: React.FC = () => {
           name: 'Sok',
         }}
       />
+      <FeedbackModal />
     </View>
   );
 };

@@ -98,10 +98,10 @@ const EditProject = () => {
     qOutdoor: string;
   }
 
-  const addProjectForm = async (dataForm: any) => {
+  const editProjectForm = async (dataForm: dataForm) => {
     try {
-      const { data } = await axios.post(
-        PROJECTS,
+      const { data } = await axios.patch(
+        `${PROJECTS}/${id}`,
         {
           name: dataForm.projectName,
           city: dataForm.city,
@@ -180,7 +180,7 @@ const EditProject = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   className="justify-center items-center p-2 bg-[#00b3ac] border-2 border-gray-300 w-40 mb-2 rounded-xl"
-                  onPress={handleSubmit(addProjectForm)}
+                  onPress={handleSubmit(editProjectForm)}
                 >
                   <Text className="color-white text-2xl">Save</Text>
                 </TouchableOpacity>

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ServiceChat",
-    "slug": "ServiceChat",
+    "name": "Hisense",
+    "slug": "Hisense",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/HisenseIcon.png",
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/iconHi.png",
+        "foregroundImage": "./assets/images/HisenseIcon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.brosoks.ServiceChat"

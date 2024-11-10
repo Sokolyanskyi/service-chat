@@ -45,8 +45,9 @@ const ChatScreen: React.FC = () => {
             _id: message.id,
             text: message.message,
             createdAt: message.created_at,
-            user: { _id: user.id, name: user.name },
-            avatar: '',
+            user: { _id: user.id, name: user.name, avatar: '' },
+
+            image: '',
           };
         });
         console.log(sortedMessages);
@@ -64,12 +65,15 @@ const ChatScreen: React.FC = () => {
   }, []);
 
   // Отправка нового сообщения
-  const onSend = useCallback((newMessages: IMessage[] = []) => {
-    const [message] = newMessages;
+  const onSend = useCallback(
+    (newMessages: IMessage[] = []) => {
+      const [message] = newMessages;
 
-    addMessage(message);
-    sendMessageToServer(id, message.text); // отправляем сообщение на сервер
-  }, []);
+      addMessage(message);
+      sendMessageToServer(id, { message: message.text }); // отправляем сообщение на сервер
+    },
+    [id, addMessage],
+  );
 
   return (
     <View className="flex-1">

@@ -39,7 +39,7 @@ export const sendMessageToServer = async (
         },
       },
     );
-    console.log(response);
+    console.log(response.data);
   } catch (error) {
     console.error('Failed to send message:', error);
   }

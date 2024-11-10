@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useLocalSearchParams, usePathname, useRouter } from 'expo-router';
@@ -18,7 +24,7 @@ export default function HeaderBarChat() {
   const project = useProjectStore((state) => state.project);
   const getProject = useProjectStore((state) => state.getProject);
   const isLoading = useProjectsStore((state) => state.isLoading);
-
+  const deleteProject = useProjectsStore((state) => state.deleteProject);
   const { id } = useLocalSearchParams();
   useEffect(() => {
     if (id) getProject(id);
@@ -30,6 +36,24 @@ export default function HeaderBarChat() {
       </SafeAreaView>
     );
   }
+  const handleDeleteProject = (projectId) => {
+    Alert.alert(
+      'Delete Project',
+      'Are you sure you want to delete this project?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            deleteProject(projectId);
+            router.replace(`/projects/projectList`);
+          },
+        },
+      ],
+      { cancelable: true },
+    );
+  };
 
   useEffect(() => {
     if (currentRoute === 'chat') {
@@ -45,7 +69,6 @@ export default function HeaderBarChat() {
   if (currentRoute === 'chat') {
     return (
       <SafeAreaView className="flex-row items-center justify-between p-4 bg-gray-100 border-b border-gray-300 w-full z-50">
-        {/* Бургер-меню слева */}
         <View className="flex-row items-center">
           <TouchableOpacity onPress={toggleMenu} className="p-2 mr-2">
             <FontAwesome name="bars" size={24} color="black" />
@@ -54,8 +77,16 @@ export default function HeaderBarChat() {
             {route?.replace(/-/g, ' ')}/{project?.name}
           </Text>
         </View>
-        {/* Иконки справа */}
+
         <View className="flex-row mr-5">
+          <TouchableOpacity
+            onPress={() => {
+              handleDeleteProject(idPath);
+            }}
+            className="mr-4"
+          >
+            <MaterialIcons name="delete" size={24} color="red" />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
               router.push(`/projects/projectList/${idPath}/viewProject`)

@@ -21,6 +21,8 @@ interface ChatState {
 
 export const useChatStore = create<ChatState>((set) => ({
   messages: [],
+  _id: '',
+  name: '',
   role: 'user', // Устанавливаем роль по умолчанию
   setMessages: (messages) => set({ messages }),
   addMessage: (message) =>

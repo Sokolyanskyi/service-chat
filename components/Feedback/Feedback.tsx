@@ -12,11 +12,14 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
+import { SURVAY } from '@/states/routes';
+import { useLocalSearchParams } from 'expo-router';
 
 const FeedbackModal = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [ratings, setRatings] = useState([0, 0, 0, 0, 0]); // Рейтинги для 5 вопросов
   const { control, handleSubmit, reset } = useForm();
+  const { id } = useLocalSearchParams();
 
   // Функция для обработки отправки формы
   const onSubmit = async (data) => {
@@ -40,7 +43,7 @@ const FeedbackModal = () => {
     if (token) {
       try {
         await axios.post(
-          'https://your-server.com/feedback',
+          `${SURVAY}/${id}/messages/${hashedMessageId}/rate`,
           {
             ratings,
             additionalFeedback: data.additionalFeedback,

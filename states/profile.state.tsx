@@ -4,7 +4,7 @@ import { PROFILE } from '@/states/routes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Profile {
-  id: number;
+  id: string;
   name: string;
   lastname: string;
   phoneNumber: string;
@@ -20,7 +20,7 @@ type Store = {
 };
 export const useProfileStore = create<Store>()((set) => ({
   profile: {
-    id: 0,
+    id: '',
     name: '',
     lastname: '',
     phoneNumber: '',

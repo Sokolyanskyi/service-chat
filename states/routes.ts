@@ -13,3 +13,4 @@ export const LOGIN = 'https://dev5.itcation.com/api/auth/login';
 export const REGISTER = 'https://dev5.itcation.com/api/auth/register';
 export const CHAT_UID = 'https://dev5.itcation.com/api/projects';
 export const ROUTE = 'https://dev5.itcation.com/api';
+export const SURVAY = 'https://dev5.itcation.com/api/projects/';

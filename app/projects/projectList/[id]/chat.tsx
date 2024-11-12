@@ -119,15 +119,23 @@ const ChatScreen: React.FC = () => {
     }
   };
   const renderInputToolbar = (props) => (
-    <InputToolbar
-      {...props}
-      containerStyle={{ flexDirection: 'row', alignItems: 'center' }}
-    >
-      <TouchableOpacity onPress={pickImage} className="mr-10">
-        <Fontisto name="paperclip" size={24} color="black" />
+    <>
+      <TouchableOpacity onPress={pickImage} className=" mt-2 ml-3">
+        <Fontisto name="paperclip" size={24} color="#00b3ac" />
       </TouchableOpacity>
-      {props.children}
-    </InputToolbar>
+      <InputToolbar
+        {...props}
+        containerStyle={{
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          width: '90%',
+          zIndex: 0,
+          marginLeft: 35,
+        }}
+      >
+        {props.children}
+      </InputToolbar>
+    </>
   );
   const renderSend = (props) => (
     <Send
@@ -137,6 +145,7 @@ const ChatScreen: React.FC = () => {
         alignItems: 'center',
         padding: 8,
       }}
+      alwaysShowSend="true"
     >
       <MaterialIcons name="send" size={24} color="black" />
     </Send>
@@ -153,7 +162,7 @@ const ChatScreen: React.FC = () => {
   );
 
   return (
-    <View className="flex-1 relative">
+    <View className="flex-1">
       <HeaderBarChat />
 
       {/* Кнопка для выбора изображения */}

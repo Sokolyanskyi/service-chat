@@ -40,7 +40,7 @@ const Index = () => {
       .string()
       .matches(
         /^[0-9]{10,15}$/,
-        'Enter a valid number, starting with + and containing 10 to 15 digits.',
+        'Enter a valid number, without + and containing 10 to 15 digits.',
       )
       .required('Phone is required'),
     email: yup
@@ -51,29 +51,17 @@ const Index = () => {
       .string()
       .required('Password is required')
       .min(8, 'Password must be at least 8 characters')
-      .matches(
-        /[a-z]/,
-        'Пароль должен содержать хотя бы одну букву в нижнем регистре',
-      )
-      .matches(
-        /[A-Z]/,
-        'Пароль должен содержать хотя бы одну букву в верхнем регистре',
-      )
-      .matches(/[0-9]/, 'Пароль должен содержать хотя бы одну цифру'),
+      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/[0-9]/, 'Password must contain at least one digit'),
     password_confirmation: yup
       .string()
       .oneOf([yup.ref('password'), undefined], 'Passwords must match')
       .required('Password is required')
       .min(8, 'Password must be at least 8 characters')
-      .matches(
-        /[a-z]/,
-        'Пароль должен содержать хотя бы одну букву в нижнем регистре',
-      )
-      .matches(
-        /[A-Z]/,
-        'Пароль должен содержать хотя бы одну букву в верхнем регистре',
-      )
-      .matches(/[0-9]/, 'Пароль должен содержать хотя бы одну цифру'),
+      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/[0-9]/, 'Password must contain at least one digit'),
   });
 
   const {

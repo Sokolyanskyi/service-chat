@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Alert,
   Modal,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -15,14 +16,14 @@ import { BlurView } from 'expo-blur';
 import { SURVAY } from '@/states/routes';
 import { useLocalSearchParams } from 'expo-router';
 
-const FeedbackModal = () => {
+const FeedbackModal = ({ hashedMessageId }: { hashedMessageId: string }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [ratings, setRatings] = useState([0, 0, 0, 0, 0]); // Рейтинги для 5 вопросов
   const { control, handleSubmit, reset } = useForm();
   const { id } = useLocalSearchParams();
 
   // Функция для обработки отправки формы
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     const token = await AsyncStorage.getItem('access_token');
     Alert.prompt(
       'Additional Feedback',
@@ -67,7 +68,7 @@ const FeedbackModal = () => {
   };
 
   // Функция для установки рейтинга
-  const handleRating = (questionIndex: any, rating: any) => {
+  const handleRating = (questionIndex: number, rating: number) => {
     const newRatings = [...ratings];
     newRatings[questionIndex] = rating;
     setRatings(newRatings);
@@ -93,8 +94,11 @@ const FeedbackModal = () => {
           tint="dark"
           className="flex-1 justify-center items-center"
         >
-          <View className="flex-1 justify-center items-center bg-blure bg-opacity-100">
-            <View className="bg-white p-4 rounded-lg w-3/4">
+          <ScrollView
+            className="flex-1   bg-blure bg-opacity-100 "
+            showsVerticalScrollIndicator={false}
+          >
+            <View className="  bg-white p-4 rounded-lg w-fit my-20 ">
               <Text className="text-lg font-bold text-center mb-4">
                 After Sales Service Satisfaction Survey
               </Text>
@@ -160,7 +164,7 @@ const FeedbackModal = () => {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </ScrollView>
         </BlurView>
       </Modal>
     </View>

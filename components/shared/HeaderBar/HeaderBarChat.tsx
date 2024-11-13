@@ -66,54 +66,53 @@ export default function HeaderBarChat() {
   const idPath = pathname.split('/')[3];
   console.log(id);
 
-  if (currentRoute === 'chat') {
-    return (
-      <SafeAreaView className="flex-row items-center justify-between p-4 bg-gray-100 border-b border-gray-300 w-full z-50">
-        <View className="flex-row items-center">
-          <TouchableOpacity onPress={toggleMenu} className="p-2 mr-2">
-            <FontAwesome name="bars" size={24} color="black" />
-          </TouchableOpacity>
-          <Text className="font-bold text-2xl">
-            {route?.replace(/-/g, ' ')}/{project?.name}
-          </Text>
-        </View>
+  return (
+    <SafeAreaView className="flex-row items-center justify-between p-4 bg-gray-100 border-b border-gray-300 w-full z-50">
+      <View className="flex-row items-center">
+        <TouchableOpacity onPress={toggleMenu} className="p-2 mr-2">
+          <FontAwesome name="bars" size={24} color="black" />
+        </TouchableOpacity>
+        <Text className="font-bold text-2xl">
+          {'Project'}
+          {route?.replace(/-/g, ' ')}/{project?.name}
+        </Text>
+      </View>
 
-        <View className="flex-row mr-5">
-          <TouchableOpacity
-            onPress={() => {
-              handleDeleteProject(idPath);
-            }}
-            className="mr-4"
-          >
-            <MaterialIcons name="delete" size={24} color="red" />
+      <View className="flex-row mr-5">
+        <TouchableOpacity
+          onPress={() => {
+            handleDeleteProject(idPath);
+          }}
+          className="mr-4"
+        >
+          <MaterialIcons name="delete" size={24} color="red" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            router.push(`/projects/projectList/${idPath}/viewProject`)
+          }
+          className="ml-4"
+        >
+          <MaterialIcons name="article" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Меню профиля */}
+      {menuVisible && (
+        <View className="absolute top-32 left-5 right-0 bg-white rounded-lg p-4 shadow-lg w-1/2 ">
+          <TouchableOpacity onPress={() => router.replace(`/profile`)}>
+            <Text className="py-2 text-lg">Profile Information</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              router.push(`/projects/projectList/${idPath}/viewProject`)
-            }
-            className="ml-4"
+            onPress={() => router.replace(`/projects/projectList`)}
           >
-            <MaterialIcons name="article" size={24} color="black" />
+            <Text className="py-2 text-lg ">Projects</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleLogout(router)}>
+            <Text className="py-2 text-lg text-red-500">Sign Out</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Меню профиля */}
-        {menuVisible && (
-          <View className="absolute top-32 left-5 right-0 bg-white rounded-lg p-4 shadow-lg w-1/2 ">
-            <TouchableOpacity onPress={() => router.replace(`/profile`)}>
-              <Text className="py-2 text-lg">Profile Information</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => router.replace(`/projects/projectList`)}
-            >
-              <Text className="py-2 text-lg ">Projects</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleLogout(router)}>
-              <Text className="py-2 text-lg text-red-500">Sign Out</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </SafeAreaView>
-    );
-  }
+      )}
+    </SafeAreaView>
+  );
 }

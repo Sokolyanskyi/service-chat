@@ -61,8 +61,8 @@ const AddProject = () => {
     city: string;
     address: string;
     commissioningCompletionDate: string;
-    quantityOfSystem: string;
-    quantityOfOutdoorUnit: string;
+    quantityOfSystem: string | number;
+    quantityOfOutdoorUnit: string | number;
   }
 
   const addProjectForm = async (dataForm: any) => {

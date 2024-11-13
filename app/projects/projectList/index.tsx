@@ -65,7 +65,7 @@ const ProjectList = () => {
   const renderItem = ({ item }: { item: Project }) => (
     <TouchableOpacity
       className="items-start justify-center p-2 bg-[#00b3ac] border-2 border-gray-300 w-80 mb-2 rounded-xl ml-2"
-      onPress={() => router.push(`/projects/projectList/${item.id}/chat`)}
+      onPress={() => router.push(`/projects/projectList/${item.id}/project`)}
     >
       <Text className="text-xl text-white font-bold ml-2">{item.name}</Text>
       <Text className="text-sm text-white ml-2">

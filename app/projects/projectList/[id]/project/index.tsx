@@ -12,7 +12,7 @@ import {
 } from '@/app/utils/chatUtils';
 import { useLocalSearchParams } from 'expo-router';
 import HeaderBarChat from '@/components/shared/HeaderBar/HeaderBarChat';
-import { Image, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import FeedbackModal from '@/components/Feedback/Feedback';
 import { useProfileStore } from '@/states/profile.state';
 import * as ImagePicker from 'expo-image-picker';
@@ -20,6 +20,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { PROJECT } from '@/states/routes';
 
 const ChatScreen: React.FC = () => {
   const { messages, addMessage, setMessages, role } = useChatStore();
@@ -76,6 +77,7 @@ const ChatScreen: React.FC = () => {
 
     if (!result.canceled) {
       const localUri = result.assets[0].uri;
+      console.log(localUri);
       sendImage(localUri);
     }
   };
@@ -83,26 +85,22 @@ const ChatScreen: React.FC = () => {
   // Отправка изображения
   const sendImage = async (imageUri: string) => {
     const token = await AsyncStorage.getItem('access_token');
-
+    console.log(token);
     const formData = new FormData();
     formData.append('image', {
-      uri: imageUri,
-      name: 'photo.jpg',
-      type: 'image/jpeg',
+      photo: imageUri,
+      title: 'photo.jpg',
+      description: 'Photo',
     });
 
     try {
-      const response = await axios.post(
-        'https://your-server.com/messages',
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
+      const response = await axios.post(`${PROJECT}/${id}/photos`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
-      );
-
+      });
+      console.log(response.data);
       // Добавление изображения в сообщение
       const newMessage = {
         _id: Math.random().toString(),
@@ -115,27 +113,21 @@ const ChatScreen: React.FC = () => {
         GiftedChat.append(previousMessages, [newMessage]),
       );
     } catch (error) {
-      console.log('Failed to send image:', error);
+      console.error('Failed to send image:', error);
     }
   };
   const renderInputToolbar = (props) => (
-    <>
-      <TouchableOpacity onPress={pickImage} className=" mt-2 ml-3">
-        <Fontisto name="paperclip" size={24} color="#00b3ac" />
-      </TouchableOpacity>
-      <InputToolbar
-        {...props}
-        containerStyle={{
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-          width: '90%',
-          zIndex: 0,
-          marginLeft: 35,
-        }}
-      >
-        {props.children}
-      </InputToolbar>
-    </>
+    <InputToolbar
+      {...props}
+      containerStyle={{
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        width: '100%',
+        zIndex: 0,
+      }}
+    >
+      {props.children}
+    </InputToolbar>
   );
   const renderSend = (props) => (
     <Send
@@ -145,9 +137,9 @@ const ChatScreen: React.FC = () => {
         alignItems: 'center',
         padding: 8,
       }}
-      alwaysShowSend="true"
+      alwaysShowSend={true}
     >
-      <MaterialIcons name="send" size={24} color="black" />
+      <MaterialIcons name="send" size={24} color="gray" />
     </Send>
   );
   // Отправка текстового сообщения
@@ -174,6 +166,23 @@ const ChatScreen: React.FC = () => {
           _id: profile.id,
           name: profile.name,
         }}
+        renderActions={() => (
+          <TouchableOpacity
+            onPress={pickImage}
+            className=" justify-center items-center h-12 ml-2 pl-1"
+          >
+            <Fontisto name="paperclip" size={24} color="gray" />
+          </TouchableOpacity>
+        )}
+        textInputProps={
+          (styles.textInput,
+          {
+            placeholder: 'Type a message',
+            fontSize: 16,
+
+            fontStyle: 'normal',
+          })
+        }
         renderSend={renderSend}
         renderInputToolbar={renderInputToolbar}
         renderMessageImage={(props) => (
@@ -184,9 +193,17 @@ const ChatScreen: React.FC = () => {
         )}
       />
 
-      <FeedbackModal />
+      <FeedbackModal hashedMessageId={messages[messages.length - 1]?._id} />
     </View>
   );
 };
-
+const styles = StyleSheet.create({
+  textInput: {
+    paddingHorizontal: 10,
+    fontSize: 18,
+    marginVertical: 4,
+    paddingTop: 4,
+    shadowRadius: 4,
+  },
+});
 export default ChatScreen;

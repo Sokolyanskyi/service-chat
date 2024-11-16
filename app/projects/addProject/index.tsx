@@ -1,10 +1,9 @@
 import * as yup from 'yup';
 /* eslint-disable */
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Button from '@/components/shared/button/Button';
 import DateInput from '@/components/DatePicker';
 import InputController from '@/components/shared/input/input';
 import { PROJECTS } from '@/states/routes';
@@ -17,7 +16,7 @@ import HeaderBar from '@/components/shared/HeaderBar/HeaderBar';
 const AddProject = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>();
-
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const addProjectFormSchema = yup.object().shape({
     projectName: yup.string().required('Project name is required'),
     city: yup.string().required('City is required'),
@@ -85,10 +84,31 @@ const AddProject = () => {
           },
         },
       );
-      console.log(dataForm);
+      console.log(data);
+
+      Alert.alert(
+        'Project added',
+        'If you want to add photos to the project, go to the edit project page',
+        [
+          {
+            text: 'Go to project list',
+            style: 'cancel',
+            onPress: () => {
+              router.replace(`/projects/projectList`);
+            },
+          },
+          {
+            text: 'Add photos',
+            style: 'default',
+            onPress: () => {
+              router.replace(`/projects/projectList/${data.id}/editProject`);
+            },
+          },
+        ],
+        { cancelable: true },
+      );
 
       console.log(data);
-      router.replace('/projects/projectList');
     } catch (err: any) {
       console.log(err.response.data);
     }
@@ -137,10 +157,6 @@ const AddProject = () => {
                 name="qOutdoor"
               />
 
-              <Button
-                text={'Add Photos'}
-                onPress={() => console.log('Add Photos')}
-              />
               <View className="flex-row gap-6 mt-14 w-full">
                 <TouchableOpacity
                   className=" justify-center items-center p-2 bg-red-400 border-2 border-gray-300 w-40 mb-2 rounded-xl"

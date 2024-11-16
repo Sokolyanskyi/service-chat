@@ -21,6 +21,7 @@ import HeaderBar from '@/components/shared/HeaderBar/HeaderBar';
 import { useProjectStore } from '@/states/project.state';
 import { useProjectsStore } from '@/states/projects.state';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Button from '@/components/shared/button/Button';
 
 const EditProject = () => {
   const router = useRouter();
@@ -42,7 +43,7 @@ const EditProject = () => {
     );
   }
 
-  console.log(project.name);
+  // console.log(project.name);
 
   const addProjectFormSchema = yup.object().shape({
     projectName: yup.string().required('Project name is required'),
@@ -93,7 +94,7 @@ const EditProject = () => {
     projectName: string;
     city: string;
     address: string;
-    date: string;
+    date: Date;
     qSystem: string;
     qOutdoor: string;
   }
@@ -169,6 +170,14 @@ const EditProject = () => {
                 placeholder={'Quantity of Outdoor Unit'}
                 control={control}
                 name="qOutdoor"
+              />
+              <Button
+                text={'Add photo'}
+                onPress={() => {
+                  router.push(
+                    `/projects/projectList/${id}/editProject/addPhoto`,
+                  );
+                }}
               />
 
               <View className="flex-row gap-6 mt-14 w-full">

@@ -87,11 +87,9 @@ const ChatScreen: React.FC = () => {
     const token = await AsyncStorage.getItem('access_token');
     console.log(token);
     const formData = new FormData();
-    formData.append('image', {
-      photo: imageUri,
-      title: 'photo.jpg',
-      description: 'Photo',
-    });
+    formData.append('image', imageUri);
+    formData.append('title', 'photo.jpg');
+    formData.append('description', 'Photo');
 
     try {
       const response = await axios.post(`${PROJECT}/${id}/photos`, formData, {

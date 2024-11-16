@@ -255,12 +255,14 @@ const Index: React.FC = () => {
                 name="password"
                 placeholder="Password"
                 control={control}
+                isPassword={true}
               />
               <InputController
                 errors={errors}
                 name="password_confirmation"
                 placeholder="Confirm password"
                 control={control}
+                isPassword={true}
               />
               <InputController
                 errors={errors}

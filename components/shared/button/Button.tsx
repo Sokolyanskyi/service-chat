@@ -4,10 +4,10 @@ import {
   PressableProps,
   StyleSheet,
   Text,
-} from "react-native";
-import { BorderRadius, Colors, FontSize } from "@/components/shared/tokens";
+} from 'react-native';
+import { BorderRadius, Colors, FontSize } from '@/components/shared/tokens';
 
-import React from "react";
+import React from 'react';
 
 const Button = ({ text, ...props }: PressableProps & { text: string }) => {
   const animatedValue = new Animated.Value(100);
@@ -41,8 +41,8 @@ const Button = ({ text, ...props }: PressableProps & { text: string }) => {
 };
 const styles = StyleSheet.create({
   button: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: BorderRadius.r10,
     height: 58,
     backgroundColor: Colors.accentColor,
